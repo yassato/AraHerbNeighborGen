@@ -84,7 +84,9 @@ Please also make `../data/`, `../output/`, and `../figs/` above this working spa
 
 3.  Wickham et al., (2019). Welcome to the tidyverse. Journal of Open Source Software, 4(43), 1686, <https://doi.org/10.21105/joss.01686>
 
-4.  Hadley Wickham, Jim Hester and Winston Chang (2021). devtools: Tools to Make Developing R Packages Easier. R package version 2.4.0. <https://CRAN.R-project.org/package=devtools>\
+4.  Hadley Wickham, Jim Hester and Winston Chang (2021). devtools: Tools to Make Developing R Packages Easier. R package version 2.4.0. <https://CRAN.R-project.org/package=devtools>
+
+5. Yasuhiro Sato, & Atsushi J. Nagano. (2023). GOfisher (v0.1.0). Zenodo. <https://doi.org/10.5281/zenodo.7901509>  
 
 ### External data
 
