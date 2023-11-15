@@ -6,10 +6,10 @@ library(rNeighborGWAS)
 library(gaston)
 
 #load data
-geno_d = readRDS(file="../data/sub_snpMAF5.rds")
+geno_d = readRDS(file="./genoData/sub_snpMAF5.rds")
 geno_d[geno_d==0]=-1 #replace 0 into -1
 
-position = readRDS(file="../data/positionsMAF5.rds")
+position = readRDS(file="./genoData/positionsMAF5.rds")
 
 pheno_d = read.csv("./insectData/SurveyCombined4GWAS_max.csv",header=TRUE)
 pheno_d = subset(pheno_d, Site=="ZH")

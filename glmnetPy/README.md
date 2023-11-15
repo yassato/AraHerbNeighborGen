@@ -32,7 +32,7 @@ R script to estimate pairwise effect sizes of mixed planting, with additional pl
 1. SimulateEffectSize.R  
 R script to simulate and visualize relationships between the herbivore damage and plant genotypic richness.  
 
-1. LASSO_GO.R
+1. LASSO_GO.R  
 R script to perform a gene ontology (GO) enrichment analysis for the LASSO results  
 
 ## References

@@ -4,16 +4,17 @@
 
 library(tidyverse)
 library(patchwork)
+library(vegan)
 
 #load SNP data
-geno_d = readRDS("../data/sub_snpMAF5LD80.rds")
+geno_d = readRDS("./genoData/sub_snpMAF5LD80.rds")
 geno_d[geno_d==0]=-1 #replace 0 into -1
 
-gwasid_list = read.csv("../data/gwasIDlist.csv",header=TRUE)
+gwasid_list = read.csv("./genoData/gwasIDlist.csv",header=TRUE)
 
-coef_path = "../output/"
+coef_path = "./output/"
 f_name = "HolesS1CHZ_glmnetLassoMAF5_mean"
-coef_d = read.csv(paste0(coef_path,f_name,".csv"), header=TRUE)
+coef_d = read.csv(paste0(coef_path,f_name,".csv.gz"), header=TRUE)
 
 self_which = which(coef_d$self_beta!=0)
 nei_which = which(coef_d$nei_beta!=0)
@@ -45,7 +46,7 @@ n_geno = length(colnames(geno_d))
 all_pair = permutations(colnames(geno_d),2,replace = TRUE)
 poly_mat_elem = mapply(res_pair_damage, all_pair[,1], all_pair[,2])
 
-poly_mat = matrix(poly_mat_elem, n_geno, n_geno, byrow=T)
+poly_mat = matrix(poly_mat_elem, n_geno, n_geno, byrow=TRUE)
 colnames(poly_mat) = colnames(geno_d)
 rownames(poly_mat) = colnames(geno_d)
 
@@ -64,6 +65,7 @@ colnames(relativeDamTable) = c("geno_i", "geno_j", "relativeDam_i")
 avg = aggregate(relativeDam_i~geno_i,relativeDamTable, mean)
 temp_avg = data.frame(x=diag(std_poly_mat)[avg$geno_i],y=avg$relativeDam_i)
 temp_avg = temp_avg[order(temp_avg$x),]
+saveRDS(temp_avg,file="../output/temp_avg.rds",compress=TRUE)
 
 relativeDamTable$geno_i = as.numeric(gsub("X", "", x=relativeDamTable$geno_i))
 relativeDamTable$geno_j = as.numeric(gsub("X", "", x=relativeDamTable$geno_j))
@@ -114,10 +116,10 @@ saveRDS(damhist,file="../figs/EffectSizeDamage.rds",compress=TRUE,version=2)
 # eff vs. kinship
 K = (crossprod(geno_d)+1)/nrow(geno_d)
 cor.test(K[upper.tri(K)],std_poly_mat[upper.tri(std_poly_mat)])
-library(vegan); mantel(std_poly_mat,K,permutations=999)
+mantel(std_poly_mat,K,permutations=999)
 
 # eff vs. geo
-geo = read.csv("../data/AtGWASlocality_added.csv",header=TRUE) # locality info available via AraPheno database
+geo = read.csv("./genoData/AtGWASlocality_added.csv",header=TRUE) # locality info available via AraPheno database
 rownames(std_poly_mat)
 gdis = c()
 for(i in 1:nrow(std_poly_mat)) {
@@ -153,16 +155,18 @@ geop = ggplot(NULL,aes(x=gmat[upper.tri(gmat)],y=std_poly_mat[upper.tri(std_poly
 
 simp = readRDS(file="../figs/SimEffsupp.rds")
 
+temp_avg = readRDS("../output/temp_avg.rds")
 avgp = ggplot(temp_avg,mapping=aes(x=x,y=y)) +
   geom_point() + theme_classic() + 
-  ylab("Average of estimated effect size") + xlab("Estimated damage under monoculture") +
-  geom_text(data.frame(x=2,y=-0.4),mapping=aes(x=x,y=y),label=paste0("r = ",round(cor(temp_avg$x, temp_avg$y),2),"***"),size=4)
+  ylab("Avg. estimated effect size") + xlab("Est. damage under monoculture") +
+  geom_smooth(method=lm,se=TRUE) +
+  geom_text(data.frame(x=1.5,y=-0.4),mapping=aes(x=x,y=y),label=paste0("r = ",round(cor(temp_avg$x, temp_avg$y),2),"***"),size=4)
 
 cor.test(temp_avg$x, temp_avg$y)
 cor.test(temp_avg[-c(195:199),]$x, temp_avg[-c(195:199),]$y)
 
-eff_biplot = (eff_img + ggtitle("(C)")) | (genp + ggtitle("(D)")) | (geop + ggtitle("(E)"))
-sim_biplot = (avgp + ggtitle("(F)")) | (simp + ggtitle("(G)")) 
+saveRDS(avgp,file="../figs/avgp.rds")
 
-biplot = eff_biplot / sim_biplot
-saveRDS(biplot,file="../figs/EffectSizeBiplot.rds",compress=TRUE,version=2)
+# composite for Figure S13c-f
+eff_biplot = (eff_img + ggtitle("(c)")) | (genp + ggtitle("(d)")) | (geop + ggtitle("(e)")) | (simp + ggtitle("(f)")) 
+saveRDS(eff_biplot,file="../figs/EffectSizeBiplot.rds",compress=TRUE,version=2)

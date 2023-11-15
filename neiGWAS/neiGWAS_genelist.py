@@ -4,10 +4,10 @@
 import pandas as pd
 import numpy as np
 import re
-gff = pd.read_csv("../data/TAIR10_GFF3_genes.gff.gz", sep="\t", header=None)
+gff = pd.read_csv("./genoData/TAIR10_GFF3_genes.gff.gz", sep="\t", header=None)
 gff.columns = ["seqid", "source", "type", "start", "end", "score", "strand", "phase", "attributes"]
 gff_gene = gff[(gff.type=="gene")|(gff.type=="transposable_element_gene")|(gff.type=="pseudogene")]
-des = pd.read_csv("../AthDescription/Araport11_genes.201606.transcript.rep_ERCC_Virus7457_GFP_GUS.txt.gz", sep="\t", compression="gzip")
+des = pd.read_csv("./genoData/Araport11_genes.201606.transcript.rep_ERCC_Virus7457_GFP_GUS.txt.gz", sep="\t", compression="gzip")
     
 # change "P_nei" into "P_self" when compiling self-genotype effects
 def SNP2GENES_lmm(Chr, pos, window):
@@ -41,9 +41,9 @@ def SNP2GENES_lmm(Chr, pos, window):
         res_list = res_list.append(res)
     return res_list
 
-f_path = "../output/"
+f_path = "./output/"
 f_name = "JPNneiGWAS_richnessS1"
-f_input = f_path + f_name + ".csv"
+f_input = f_path + f_name + ".csv.gz"
 gwas_out = pd.read_csv(f_input)
 padj = np.percentile(gwas_out["P_nei"].dropna(),0.1)
 gwas_out_p = gwas_out[gwas_out["P_nei"]<padj]
@@ -55,6 +55,7 @@ for j in range(0, gwas_out_p.shape[0]):
     res = SNP2GENES_lmm(gwas_out_p.iat[j,1], gwas_out_p.iat[j,2], 10000) # window = 10 kb
     gene_list = gene_list.append(res)
 
+# export for Table S4
 f_out = "../geneList/" + f_name + "_0001_P_nei_10kb.txt" # export the results outside the GitHub repository
 gene_list.to_csv(f_out,sep="\t")
 

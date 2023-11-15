@@ -2,18 +2,18 @@
 # Simulating effect size of mixed planting #
 ############################################
 
-library(ggplot2)
+library(tidyverse)
 library(arrangements)
 
 #load SNP data
-geno_d = readRDS("../data/sub_snpMAF5LD80.rds")
+geno_d = readRDS("./genoData/sub_snpMAF5LD80.rds")
 geno_d[geno_d==0]=-1 #replace 0 into -1
 
-gwasid_list = read.csv("../data/gwasIDlist.csv",header=TRUE)
+gwasid_list = read.csv("./genoData/gwasIDlist.csv",header=TRUE)
 
-coef_path = "../output/"
+coef_path = "./output/"
 f_name = "HolesS1CHZ_glmnetLassoMAF5_mean"
-coef_d = read.csv(paste0(coef_path,f_name,".csv"), header=TRUE)
+coef_d = read.csv(paste0(coef_path,f_name,".csv.gz"),header=TRUE)
 
 self_which = which(coef_d$self_beta!=0)
 nei_which = which(coef_d$nei_beta!=0)
@@ -42,10 +42,10 @@ res_pair_damage = function(selfID, neiID) {
 
 n_geno = length(colnames(geno_d))
 
-all_pair = permutations(colnames(geno_d),2,replace = TRUE)
+all_pair = permutations(colnames(geno_d),2,replace=TRUE)
 poly_mat_elem = mapply(res_pair_damage, all_pair[,1], all_pair[,2])
 
-poly_mat = matrix(poly_mat_elem, n_geno, n_geno, byrow=T)
+poly_mat = matrix(poly_mat_elem, n_geno, n_geno, byrow=TRUE)
 colnames(poly_mat) = colnames(geno_d)
 rownames(poly_mat) = colnames(geno_d)
 
@@ -118,6 +118,7 @@ b = b + geom_text(data.frame(x=2.2,y=y3+0.1),mapping=aes(x=x,y=y),label="Bla-1 v
   geom_text(data.frame(x=2.2,y=y1+0.1),mapping=aes(x=x,y=y),label="Bg-2 vs. Uod-1",angle=0,size=3,hjust=0) +
   geom_point(data.frame(x=2,y=y1),mapping=aes(x=x,y=y),pch=1)
 
+# export for Figure 4c
 saveRDS(b,file="../figs/SimEffmain.rds",compress=TRUE,version=2)
 
 
@@ -203,5 +204,6 @@ b = b + geom_text(data.frame(x=4,y=y3),mapping=aes(x=x,y=y),label="<- Bla-1 vs. 
   geom_text(data.frame(x=4,y=y1),mapping=aes(x=x,y=y),label="<- Bg-2 vs. Uod-1",angle=0,size=3) +
   geom_point(data.frame(x=2,y=y1),mapping=aes(x=x,y=y),pch=1)
 
+# export for Figure S13f
 saveRDS(b,file="../figs/SimEffsupp.rds",compress=TRUE,version=2)
 

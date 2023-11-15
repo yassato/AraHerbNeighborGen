@@ -73,7 +73,7 @@ gc();gc()
 # (4) export the input genotype data
 # export SNP matrix
 geno_d = d_geno_maf
-saveRDS(geno_d, file="../data/sub_snpMAF5.rds", compress=TRUE, version=2)
+saveRDS(geno_d, file="./genoData/sub_snpMAF5.rds", compress=TRUE, version=2)
 
 # export the position file with the choromosome no.
 chr_which = which((position[-length(position)] - position[-1])>0)
@@ -82,4 +82,5 @@ n_acc = ncol(d_geno_maf)
 maf = apply(d_geno_maf,1,sum)/n_acc
 maf[maf>0.5] = 1 - maf[maf>0.5]
 posMAF5 = cbind(chr, position, maf)
-saveRDS(posMAF5, file="../data/positionsMAF5.rds", compress=TRUE, version=2)
+saveRDS(posMAF5, file="./genoData/positionsMAF5.rds", compress=TRUE, version=2)
+

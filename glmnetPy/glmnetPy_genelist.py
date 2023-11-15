@@ -1,10 +1,10 @@
 import pandas as pd
 import numpy as np
 import re
-gff = pd.read_csv("../data/TAIR10_GFF3_genes.gff.gz", sep="\t", header=None)
+gff = pd.read_csv("./genoData/TAIR10_GFF3_genes.gff.gz", sep="\t", header=None)
 gff.columns = ["seqid", "source", "type", "start", "end", "score", "strand", "phase", "attributes"]
 gff_gene = gff[(gff.type=="gene")|(gff.type=="transposable_element_gene")|(gff.type=="pseudogene")] #type = "all"
-des = pd.read_csv("../AthDescription/Araport11_genes.201606.transcript.rep_ERCC_Virus7457_GFP_GUS.txt.gz", sep="\t", compression="gzip")
+des = pd.read_csv("./genoData/Araport11_genes.201606.transcript.rep_ERCC_Virus7457_GFP_GUS.txt.gz", sep="\t", compression="gzip")
     
 def SNP2GENES_glmnet(Chr, pos, window):
     start = int(pos) - int(window)
@@ -38,9 +38,9 @@ def SNP2GENES_glmnet(Chr, pos, window):
     return res_list
 
 
-f_path = "../output/"
-f_name = "HolesCHZ_glmnetLassoMAF5_mean"
-f_input = f_path + f_name + ".csv"
+f_path = "./output/"
+f_name = "HolesS1CHZ_glmnetLassoMAF5_mean"
+f_input = f_path + f_name + ".csv.gz"
 gwas_out = pd.read_csv(f_input)
 
 gwas_out = gwas_out[(gwas_out.nei_beta!=0)|(gwas_out.self_beta!=0)]
@@ -50,7 +50,7 @@ for j in range(0, gwas_out.shape[0]):
     res = SNP2GENES_glmnet(gwas_out.iat[j,0], gwas_out.iat[j,1], 10000)
     gene_list = gene_list.append(res)
 
-
+# export for Table S5
 f_out = "../geneList/" + f_name + "_10kb.txt"
 gene_list.to_csv(f_out,sep="\t")
 

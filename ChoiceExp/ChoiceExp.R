@@ -2,7 +2,7 @@
 # GLM and figures for choice experiment data #
 ##############################################
 
-library(ggplot2)
+library(tidyverse)
 library(MASS)
 
 setwd("./ChoiceExp")
@@ -10,6 +10,7 @@ d = read.csv("bioassay.csv",header=TRUE)
 d$Line = factor(d$Line,levels=c("Bg-2","Uod-1","Vastervik","Jm-0","Bla-1","Bro1-6"))
 d$Cup = factor(d$Cup)
 
+# for Table S9
 d1 = subset(d,Set==1)
 res = glm.nb(holes~factor(Cup)+Line,data=d1)
 summary(res)
@@ -32,6 +33,7 @@ b = ggplot(d,aes(x=Line,y=holes+1)) +
   geom_text(data.frame(x=1.5,y=30),mapping=aes(x=x,y=y),label="***",size=6) +
   geom_text(data.frame(x=3.5,y=30),mapping=aes(x=x,y=y),label="**",size=6)
 
+# Figure S15
 saveRDS(b,file="../../figs/ChoiceExp_boxplot.rds")
 ggsave(b,filename="choice.pdf",width=5,height=4)
 

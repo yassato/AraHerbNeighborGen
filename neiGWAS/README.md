@@ -20,4 +20,16 @@ R script to perform association mapping with focal or neighbor genotypes in the 
 Python3 script to list candidate genes from the output of "NeighborCHZ(or JPN).R"  
 
 1. neiGWAS_ManhattanPlot.R  
-R script to depict Manhattan plots and other supplementary figures for the results of Neighbor GWAS. To complete a composite figure, run ```../gscan/``` before this script.     
+R script to depict Manhattan plots and other supplementary figures for the results of Neighbor GWAS. To complete a composite figure, run ```../gscan/``` before this script.  
+
+1. NeighborCHZ_wo_K2.R  
+R script to perform association mapping without $\mathbf{K}_2$.  
+
+1. NeighborPerm_i.R  
+R script to perform a single iteration of permutation tests.   
+
+1. run_NeighborPerm.sh  
+Shell script to control ```NeighborPerm_i.R```.
+
+1. NeighborPerm_out.R  
+R script to analyze outputs of permutation tests.

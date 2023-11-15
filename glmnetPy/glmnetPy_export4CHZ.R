@@ -5,10 +5,10 @@
 library(rNeighborGWAS)
 
 #load data
-geno_d = readRDS(file="../data/sub_snpMAF5LD80.rds")
+geno_d = readRDS(file="./genoData/sub_snpMAF5LD80.rds")
 geno_d[geno_d==0]=-1 #replace 0 into -1
 
-position = readRDS(file="../data/positionsMAF5LD80.rds")
+position = readRDS(file="./genoData/positionsMAF5LD80.rds")
 
 pheno_d = read.csv("./insectData/SurveyCombined4GWAS_max.csv",header=TRUE)
 pheno_d = subset(pheno_d, Site=="ZH")

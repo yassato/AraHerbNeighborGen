@@ -22,7 +22,7 @@ def save_object(obj, filename):
 
 # load glmnet results
 
-fpath = "../output/"
+fpath = "./output/"
 fname = "ScoreS3JPN_glmnetLassoMAF5"
 
 fn = fpath + fname + ".pkl.gz"

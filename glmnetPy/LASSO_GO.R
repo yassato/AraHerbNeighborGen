@@ -13,7 +13,7 @@ library(rrvgo)
 library(org.At.tair.db)
 
 # load a list of AGI and GO SLIM. 
-load("../AthGO/ulgSLIM.TAIR_211201")
+load("./genoData/ulgSLIM.TAIR_211201")
 
 rrvgo_fig = function(gl) {
   fisher.res = ng.mft(ulg, gl)
@@ -33,7 +33,7 @@ rrvgo_fig = function(gl) {
   return(reducedTerms)
 }
 
-genes = read.csv("../output/HolesCHZ_glmnetLassoMAF5_mean_10kbAGI.csv")
+genes = read.csv("./output/HolesCHZ_glmnetLassoMAF5_mean_10kbAGI.csv")
 gl_pos = genes[genes$nei_beta>0,"Locus"]
 gl_pos = unique(gl_pos)
 gl_neg = genes[genes$nei_beta<0,"Locus"]
@@ -42,7 +42,7 @@ gl_neg = unique(gl_neg)
 res1 = rrvgo_fig(gl_pos)
 res2 = rrvgo_fig(gl_neg)
 
-# write REVIGO tables
+# write REVIGO tables (Table S6)
 write.csv(res1,file="../output/REVIGO_LASSO_pos2.csv")
 write.csv(res2,file="../output/REVIGO_LASSO_neg2.csv")
 

@@ -10,10 +10,10 @@ scaling = function(x){
 library(rNeighborGWAS)
 
 #load data
-geno_d = readRDS(file="../data/sub_snpMAF5LD80.rds")
+geno_d = readRDS(file="./genoData/sub_snpMAF5LD80.rds")
 geno_d[geno_d==0]=-1 #replace 0 into -1
 
-position = readRDS(file="../data/positionsMAF5LD80.rds")
+position = readRDS(file="./genoData/positionsMAF5LD80.rds")
 
 pheno_d = read.csv("./insectData/Survey20194GWAS_max.csv",header=TRUE)
 pheno_d = subset(pheno_d, Site=="ZH")
@@ -66,7 +66,7 @@ y_obs = as.numeric(y_obs)
 corlist = c()
 
 # input file must match the target trait
-beta = read.csv("../output/HolesCHZself_glmnetLassoMAF5_coefALL.csv",header=TRUE)
+beta = read.csv("./output/HolesCHZself_glmnetLassoMAF5_coefALL.csv.gz",header=TRUE)
 beta = beta[-c(1:19),]
 r_self = c()
 for(i in 1:100) {
@@ -78,7 +78,7 @@ for(i in 1:100) {
 }
 corlist = cbind(corlist,r_self)
 
-beta = read.csv("../output/HolesS1CHZ_glmnetLassoMAF5_coefALL.csv",header=TRUE)
+beta = read.csv("./output/HolesS1CHZ_glmnetLassoMAF5_coefALL.csv.gz",header=TRUE)
 beta = beta[-c(1:19),]
 nsnp = nrow(beta)/2
 r_both = c()
@@ -90,7 +90,7 @@ for(i in 1:100) {
 }
 corlist = cbind(corlist,r_both)
 
-beta = read.csv("../output/HolesS2CHZ_glmnetLassoMAF5_coefALL.csv",header=TRUE)
+beta = read.csv("./output/HolesS2CHZ_glmnetLassoMAF5_coefALL.csv.gz",header=TRUE)
 beta = beta[-c(1:19),]
 nsnp = nrow(beta)/2
 r_both = c()
