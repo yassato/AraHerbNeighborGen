@@ -27,12 +27,13 @@ plot(res_rda)
 df = data.frame(res_rda$CCA$wa,d_env)
 df$Year = factor(df$Year)
 
+# for Figure S1a
 pca_p = ggplot(data=df,aes(x=RDA1,y=RDA2,shape=Year,color=Site)) + geom_point(alpha=0.25) + 
   theme_classic() + geom_vline(xintercept=0,colour="grey",lty=2) + geom_hline(yintercept=0,colour="grey",lty=2) +
   xlab(paste0("RDA1 (",round(varp[1],2)*100,"%)")) + ylab(paste0("RDA2 (",round(varp[2],2)*100,"%)")) +
   scale_color_manual(values=c("red","blue"),labels=c("Otsu","Zurich")) + xlim(NA,0.08) + theme(legend.position=c(0.9,0.7))
   
-# figure for supplementary materials
+# for Figure S1b-g
 df = sort(apply(com2017[1601:3200,],2,sum), decreasing=TRUE)[1:10]
 df = data.frame(names=names(df),no=df)
 b1 = ggplot(data=df,aes(x=reorder(names,-no),y=no)) + geom_bar(stat="identity") + 
@@ -57,7 +58,7 @@ b4 = ggplot(data=df,aes(x=reorder(names,-no),y=no)) + geom_bar(stat="identity") 
   theme_classic() + ylab("No. of individuals") + xlab("") + ggtitle("Otsu 2018") + 
   scale_y_log10() + theme(axis.text.x=element_text(angle=90))
 
-# load data on 2019
+# load 2019 data
 d2019 = read.csv("./insectData/Survey20194GWAS_max.csv")
 
 dz2019 = subset(d2019, Site=="ZH")
@@ -74,13 +75,14 @@ b6 = ggplot(data=df,aes(x=reorder(names,-no),y=no)) + geom_bar(stat="identity") 
   theme_classic() + ylab("No. of individuals") + xlab("") + ggtitle("Otsu 2019") + 
   scale_y_log10() + theme(axis.text.x=element_text(angle=90))
 
-# Figure S4
+# Figure S1
 p = (pca_p) / (b1+b2) / (b3+b4) / (b5+b6) + plot_annotation(tag_levels = "a") + plot_layout(heights=c(2,1,1,1))
 ggsave(p,filename="InsectRDAandNo.pdf",width=8,height=10)
 
+
 # trait values
 h1 = ggplot(data=subset(d, Site=="ZH"),aes(x=Holes)) + geom_histogram() +
-  theme_classic() + labs(title="(a) Zurich",subtitle="Leaf holes") + #scale_x_log10() +
+  theme_classic() + labs(title=substitute(paste(bold("a"),"  Zurich")),subtitle="Leaf holes") + #scale_x_log10() +
   xlab("No. of leaf holes") + ylab("No. of plants")
 h2 = ggplot(data=subset(d, Site=="ZH"),aes(x=chewer)) + geom_histogram(binwidth=1) +
   theme_classic() + labs(subtitle="External feeders") + #scale_x_log10() +
@@ -92,14 +94,14 @@ h4 = ggplot(data=subset(d, Site=="ZH"),aes(x=richness)) + geom_histogram(binwidt
   theme_classic() + labs(subtitle="No. of insect species") + #scale_x_log10() +
   xlab("No. of insect species") + ylab("No. of plants")
 
-h5 = ggplot(data=subset(d, Site=="ZH"),aes(x=divHexp)) + geom_histogram() + ggtitle("(a) Zurich") +
+h5 = ggplot(data=subset(d, Site=="ZH"),aes(x=divHexp)) + geom_histogram() + ggtitle(substitute(paste(bold("a"),"  Zurich"))) +
   theme_classic() + xlab("Exponential Shannon diversity") + ylab("No. of plants")
 h6 = ggplot(data=subset(d, Site=="ZH"),aes(x=divD)) + geom_histogram() +
   theme_classic() + xlab("Simpson diversity") + ylab("No. of plants")
 
 
 h7 = ggplot(data=subset(d, Site=="JP"),aes(x=Score)) + geom_histogram(binwidth=1) +
-  theme_classic() + ggtitle("(b) Otsu") + labs(subtitle="Leaf area loss") +
+  theme_classic() + ggtitle(substitute(paste(bold("b"),"  Otsu"))) + labs(subtitle="Leaf area loss") +
   xlab("Leaf area loss (score)") + ylab("No. of plants")
 h8 = ggplot(data=subset(d, Site=="JP"),aes(x=chewer)) + geom_histogram(binwidth=1) + # scale_x_log10() + 
   labs(subtitle="External feeders") + theme_classic() + 
@@ -111,12 +113,12 @@ h10 = ggplot(data=subset(d, Site=="JP"),aes(x=richness)) + geom_histogram(binwid
   labs(subtitle="No. of insect species") + theme_classic() + 
   xlab("No. of insect species") + ylab("No. of plants")
 
-h11 = ggplot(data=subset(d, Site=="JP"),aes(x=divHexp)) + geom_histogram() + ggtitle("(b) Otsu") +
+h11 = ggplot(data=subset(d, Site=="JP"),aes(x=divHexp)) + geom_histogram() + ggtitle(substitute(paste(bold("b"),"  Otsu"))) +
   theme_classic() + xlab("Exponential Shannon diversity") + ylab("No. of plants")
 h12 = ggplot(data=subset(d, Site=="JP"),aes(x=divD)) + geom_histogram() +
   theme_classic() + xlab("Simpson diversity") + ylab("No. of plants")
 
-# Figure S5
+# Figure S2
 h = (h5+h11) / (h6+h12)
 ggsave(h, filename="../figs/TraitValues.pdf",width=6,height=4)
 
@@ -172,7 +174,7 @@ pveJP = c(res$PVE[c(2,15*c(0:1)+3)],
 bar1 = ggplot(NULL,aes(x=factor(c(0,4,12)),y=pveZH[1:3])) + geom_col() +
   ylim(0,1) + ylab("PVE") + xlab("No. of neighbors") + theme_classic() +
   geom_text(data.frame(x=c(1.75,2.75),y=c(0.6,0.75)),mapping=aes(x=x,y=y),label="***",size=6) +
-  labs(title="(a) Zurich",subtitle="Leaf holes")
+  labs(title=substitute(paste(bold("a"),"  Zurich")),subtitle="Leaf holes")
 
 bar2 = ggplot(NULL,aes(x=factor(c(0,4,12)),y=pveZH[10:12])) + geom_col() +
   ylim(0,1) + ylab("") + xlab("No. of neighbors") + theme_classic() +
@@ -195,7 +197,7 @@ bar1 = ggplot(NULL,aes(x=factor(c(0,4,12)),y=pveJP[1:3])) + geom_col() +
   ylim(0,1) + ylab("PVE") + xlab("No. of neighbors") + theme_classic() +
   geom_text(data.frame(x=1.75,y=0.30),mapping=aes(x=x,y=y),label="**",size=6) +
   geom_text(data.frame(x=2.75,y=0.30),mapping=aes(x=x,y=y),label="*",size=6) +
-  labs(title="(b) Otsu",subtitle="Leaf area loss")
+  labs(title=substitute(paste(bold("b"),"  Otsu")),subtitle="Leaf area loss")
 
 bar2 = ggplot(NULL,aes(x=factor(c(0,4,12)),y=pveJP[10:12])) + geom_col() +
   ylim(0,1) + ylab("") + xlab("No. of neighbors") + theme_classic() +
@@ -213,7 +215,7 @@ bar4 = ggplot(NULL,aes(x=factor(c(0,4,12)),y=pveJP[13:15])) + geom_col() +
 
 barj = bar1 | bar2 | bar3 | bar4
 
-# Figure S6
+# Figure S3
 bar_pve = barz / barj
 ggsave(bar_pve,filename="../figs/PVEsupp.pdf",width=7,height=5,bg="transparent")
 

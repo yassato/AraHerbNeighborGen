@@ -52,7 +52,7 @@ rownames(poly_mat) = colnames(geno_d)
 std_poly_mat = (poly_mat - mean(poly_mat))/sd(poly_mat)
 
 # all genotypes
-
+set.seed(1234)
 eff_sim = c()
 for(j in 1:9999) {
   n_geno = 8
@@ -91,8 +91,8 @@ for(j in 1:9999) {
 m = apply(eff_sim,2,mean)
 er = apply(eff_sim,2,sd)
 
-df = data.frame(x=c(1,2,4,8), y=m)
-b <- ggplot(data=df, aes(x=x, y=m)) + geom_line() + geom_point() +
+df1 = data.frame(x=c(1,2,4,8), y=m)
+b <- ggplot(data=df1, aes(x=x, y=m)) + geom_line() + geom_point() +
   ylab("Simulated damage") + xlab("No. of genotypes") + xlim(1,8) +
   geom_errorbar(aes(ymax=m+er, ymin=m-er),width=0.0) + theme_test()
 
@@ -118,7 +118,7 @@ b = b + geom_text(data.frame(x=2.2,y=y3+0.1),mapping=aes(x=x,y=y),label="Bla-1 v
   geom_text(data.frame(x=2.2,y=y1+0.1),mapping=aes(x=x,y=y),label="Bg-2 vs. Uod-1",angle=0,size=3,hjust=0) +
   geom_point(data.frame(x=2,y=y1),mapping=aes(x=x,y=y),pch=1)
 
-# export for Figure 4c
+# export for main Figure 4c
 saveRDS(b,file="../figs/SimEffmain.rds",compress=TRUE,version=2)
 
 
@@ -177,8 +177,8 @@ for(j in 1:9999) {
 m = apply(eff_sim,2,mean)
 er = apply(eff_sim,2,sd)
 
-df = data.frame(x=c(1,2,4,8), y=m)
-b <- ggplot(data=df, aes(x=x, y=m)) + geom_line() + geom_point() +
+df2 = data.frame(x=c(1,2,4,8), y=m)
+b <- ggplot(data=df2, aes(x=x, y=m)) + geom_line() + geom_point() +
   ylab("Simulated damage") + xlab("No. of genotypes") + xlim(1,8) +
   geom_errorbar(aes(ymax=m+er, ymin=m-er),width=0.0) + theme_classic()
 

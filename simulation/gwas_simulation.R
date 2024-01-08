@@ -50,11 +50,11 @@ pves = readRDS("./simulation/pve.rds")
 
 scales = c(sqrt(2),sqrt(8),sqrt(18),sqrt(32),sqrt(50),sqrt(72),sqrt(128),sqrt(162))
 
-# Figure S3
+# Figure S8
 pdf(file="../figs/slopePVEsimu.pdf",width=8,height=4)
 par(mfcol=(c(1,2)))
 plot(round(scales,2),slopes[1,],type="b",ylim=c(0.5,1.5),las=1,
-     ylab="slope of QQ-plot",xlab="spatial distance from a focal plant",main="(a)")
+     ylab="slope of QQ-plot",xlab="spatial distance from a focal plant",main="a                                           ")
 for(i in 2:30) { points(round(scales,2),slopes[i,],type="b") }
 abline(a=1,b=0,lwd=2,col="blue",lty=2)
 abline(v=sqrt(2),lwd=2,col="red",lty=2)
@@ -65,7 +65,7 @@ for(i in 1:30) {
 }
 
 plot(c(0,round(scales,2)),net_pves[1,],type="b",ylim=c(0,0.3),las=1,
-     ylab="PVE - h2",xlab="spatial distance from a focal plant",main="(b)")
+     ylab="PVE - h2",xlab="spatial distance from a focal plant",main="b                                           ")
 for(i in 2:30) { points(c(0,round(scales,2)),net_pves[i,],type="b") }
 abline(a=1,b=0,lwd=2,col="blue",lty=2)
 abline(v=sqrt(2),lwd=2,col="red",lty=2)
@@ -130,12 +130,11 @@ pr8 = ggplot(NULL,aes(x=af,y=r_mat[,8])) + geom_point(alpha=0.1) + theme_classic
   labs(subtitle=paste0("spatial distance = ",round(as.numeric(colnames(r_mat)[8]),2))) + 
   xlab("allele frequency") + ylab("Pearson's correlation coef.") + geom_smooth(method="gam")
 
-# Figure S2
+# Figure S7
 pr_all = (pr1 | pr2 | pr3 | pr4) / (pr5 | pr6 | pr7 | pr8)
 ggsave(pr_all,filename="../figs/cor_af.jpg",width=10,height=5,dpi=300)
 
-# test with K1
-set.seed(1234)
+# test w/o K2
 coef = c()
 for(i in 1:30) {
   g_bin = readRDS("./simulation/Ara250kRegMap_chr12_MAF10.rds")
@@ -169,12 +168,14 @@ for(i in 1:30) {
     return(pchisq(2*(LL01 - LL00),1,lower.tail = FALSE))
   }
   
+  # w/o K2
   p1 = parallel::mcmapply(test_i, 1:dim(g_nei)[2],mc.cores=8L)
   p = p1
   x = -log(ppoints(length(p)),10)
   y = -log(sort(p,decreasing=FALSE),10)
   slope1 = coef(lm(y~x))[2]
   
+  # w/ K2
   res = nei_lmm(geno=g_self,g_nei=g_nei,pheno=pheno,response="quantitative",n_core=8L)
   p2 = res$p_nei
   
@@ -188,15 +189,28 @@ for(i in 1:30) {
 
 saveRDS(coef,file="./simulation/pK.rds")
 
+x1 = -log(ppoints(length(p1)),10)
+y1 = -log(sort(p1,decreasing=FALSE),10)
+slope1 = coef(lm(y1~x1))
+x2 = -log(ppoints(length(p2)),10)
+y2 = -log(sort(p2,decreasing=FALSE),10)
+slope2 = coef(lm(y2~x2))
+qqKsim = ggplot(NULL,aes(x=x1,y=y1)) + geom_point(alpha=0.2,color="red") + geom_abline(slope=slope1[2],intercept=slope1[1],color="red") +
+  geom_point(aes(x=x2,y=y2),alpha=0.2,color="blue") + geom_abline(slope=slope2[2],intercept=slope2[1],color="blue") +
+  geom_abline(slope=1,intercept=0,lty=2) + labs(subtitle="Simulated data") +
+  theme_classic() + xlab(expression("Expected "*-log[10](p))) + ylab(expression("Observed "*-log[10](p))) +
+  geom_label(data.frame(x=0.25,y=6),mapping=aes(x=x,y=y),label=paste0("w/o K2: slope = ",round(slope1[2],3)),size=3,color=rgb(1,0.0,0,1),hjust=0) +
+  geom_label(data.frame(x=0.25,y=5.5),mapping=aes(x=x,y=y),label=paste0("w/ K2: slope = ",round(slope2[2],3)),size=3,color=rgb(0,0,1,1),hjust=0)
+
 coef = readRDS("./simulation/pK.rds")
 colnames(coef) = c("K1","K1_and_K2")
 coef = as.data.frame(coef)
 d = gather(coef,key="K",value="slope")
 
-bp = ggplot(d,aes(x=K,y=slope)) + geom_boxplot() + theme_classic() + labs(subtitle="simulation") +
+bp = ggplot(d,aes(x=K,y=slope)) + geom_boxplot() + theme_classic() + labs(subtitle="Simulation") +
   ylab("slope of QQ-plot") + xlab("K") + geom_jitter() + geom_hline(yintercept=1,lty=2)
 
-dK2 = read.csv("../output/CHZneiGWAS_HolesS1_wo_K2.csv",header=TRUE)
+dK2 = read.csv("./output/CHZneigGWAS_HolesS1_wo_K2.csv.gz",header=TRUE)
 p = dK2$p1
 x = -log(ppoints(length(p)),10)
 y = -log(sort(p,decreasing=FALSE),10)
@@ -204,6 +218,6 @@ qqK2 = ggplot(NULL,aes(x=x,y=y)) + geom_point(alpha=0.2) + geom_abline(slope=1,i
   theme_classic() + xlab(expression("Expected "*-log[10](p))) + ylab(expression("Observed "*-log[10](p)))
 
 # Figure S9
-bpK2 = (bp | qqK2) + plot_annotation(tag_level="a")
-ggsave(bpK2,filename="../figs/bp_qqK2.jpg",width=8,height=4,dpi=300)
+bpK2 = (bp | qqKsim | qqK2) + plot_annotation(tag_level="a")
+ggsave(bpK2,filename="../figs/bp_qqK2.jpg",width=12,height=4,dpi=300)
 

@@ -41,12 +41,14 @@ n_plants = nrow(pheno_d)
 geno = geno_d[,as.character(pheno_d$gwasID)]
 geno = t(geno)
 
-# change spatial scale sqrt(2)+0.01; sqrt(8)+0.01; sqrt(18)+0.01 for s = 1(J=4); s = 2(J=12); or s = 3; respectively
-scale = sqrt(8)+0.01
-
-g_nei = nei_coval(geno=geno,smap=smap,scale=scale,grouping=pheno_d$Block)
+# change spatial scale sqrt(2)+0.01; sqrt(8)+0.01; sqrt(18)+0.01 for s = 1 (J=4); s = 2 (J=12); or s = 3; respectively
+scale = sqrt(2)+0.01
 X = as.matrix(model.matrix(~factor(Block)+scale(InitLeafLen)+Bolting+edge-1,data=pheno_d))
 
+res = calc_PVEnei(pheno=scale(log(pheno_d$Holes+1)),geno=geno,smap=smap,scale=scale,grouping=pheno_d$Block,addcovar=X,n_core=10L)
+saveRDS(res,file=paste0("../output/neiGWAS_perm/partCHZpve",i,".rds"),version=2)
+
+g_nei = nei_coval(geno=geno,smap=smap,scale=scale,grouping=pheno_d$Block)
 res = nei_lmm(geno=geno,g_nei=g_nei,pheno=scale(log(pheno_d$Holes+1)),addcovar=X,n_core=10L)
 res = data.frame(position,res)
 colnames(res) = c("Chr","Position","MAF","beta_self","beta_nei","P_self","P_nei")

@@ -6,7 +6,7 @@ The original survey data are stored as .csv files named "AthInsectSurveyXXXX.csv
 R script to convert the original files 
 
 2. InsectRDA.R  
-R script to perform an ordination analysis by RDA and then depict figures. "InsectRDAandNo.pdf" is its output figure.  
+R script to perform an ordination analysis by RDA and then depict figures. "InsectRDAandNo.pdf" is its output figure. Another directory ```../neiGWAS``` needs to run beforehand to complete a composite figure.  
 
 ## Data files
 

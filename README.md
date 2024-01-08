@@ -28,6 +28,10 @@ Source codes and phenotype data for the analysis of **Ara**bidopsis **Herb**ivor
 -   **./simulation**\
     Numerical analysis and simulations for supplementary materials
 
+-   **./output**\
+    Directory to store intermediate files
+
+
 ## The other files
 - AraHerbGWAS.Rproj  
 A RStudio project to run the analyses above

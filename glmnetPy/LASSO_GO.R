@@ -42,7 +42,7 @@ gl_neg = unique(gl_neg)
 res1 = rrvgo_fig(gl_pos)
 res2 = rrvgo_fig(gl_neg)
 
-# write REVIGO tables (Table S6)
+# write REVIGO tables (Table S4)
 write.csv(res1,file="../output/REVIGO_LASSO_pos2.csv")
 write.csv(res2,file="../output/REVIGO_LASSO_neg2.csv")
 

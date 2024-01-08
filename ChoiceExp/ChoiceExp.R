@@ -33,7 +33,7 @@ b = ggplot(d,aes(x=Line,y=holes+1)) +
   geom_text(data.frame(x=1.5,y=30),mapping=aes(x=x,y=y),label="***",size=6) +
   geom_text(data.frame(x=3.5,y=30),mapping=aes(x=x,y=y),label="**",size=6)
 
-# Figure S15
+# Figure S15b
 saveRDS(b,file="../../figs/ChoiceExp_boxplot.rds")
 ggsave(b,filename="choice.pdf",width=5,height=4)
 

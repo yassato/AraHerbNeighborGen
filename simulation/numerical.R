@@ -69,6 +69,7 @@ for(i in 1:N) xixj = c(xixj, XiXj1(i,dmat=dmat,range=sqrt(2)))
 Ei_t0 = (J*xixj+h*Xi)
 
 #MCMC by Gibbs sampling
+set.seed(1234)
 for(j in 1:100) {
   Xi_t0 = Xi
   
@@ -109,7 +110,7 @@ ip2 = ggplot(d2,aes(x=x,y=y,fill=z)) + geom_tile(color="grey50") +
 ip = (ip1 | ip2) + plot_annotation(tag_levels = "a")
 ipp = (ip1 | ip2) / (p1 | p2) / (p3 | p4) + plot_annotation(tag_levels = "a")
 
-# Figure S1
+# Figure S6
 ggsave(ipp,filename="../figs/IsingFDS.pdf",width=6,height=8)
 
 

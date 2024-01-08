@@ -59,5 +59,5 @@ test_i = function(i) {
 
 p1 = parallel::mcmapply(test_i, 1:dim(geno)[2],mc.cores=24L)
 res = data.frame(position,p1)
-write.csv(res,"../output/CHZneiGWAS_HolesS1_wo_K2.csv")
+write.csv(res,"../output/CHZneigGWAS_HolesS1_wo_K2.csv")
 

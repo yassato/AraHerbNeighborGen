@@ -81,41 +81,65 @@ res$pvalue[res$pvalue < 0.05]
 
 
 # histograms
-s1 = list()
+s1 = list(); b1 = list()
 fn = system("ls ./output/*_*S1.csv.gz", intern=TRUE)
 for(i in fn[c(1,2,4,3,5,6,8,7)]) {
   gwas_out = read.csv(i, header=TRUE)
   gwas_out = gwas_out[gwas_out$P_nei<quantile(gwas_out$P_nei,0.001),]
+  gwas_out$MAF[gwas_out$MAF>0.5] = 1 - gwas_out$MAF[gwas_out$MAF>0.5]
+  print(wilcox.test(gwas_out$MAF~(gwas_out$beta_nei>0))$p.value)
   p = ggplot(gwas_out,aes(x=beta_nei))+geom_histogram()+theme_classic()+ylab("")+xlab("")
+  b = ggplot(gwas_out,aes(x=(beta_nei>0),y=MAF,group=(beta_nei>0)))+
+    geom_boxplot()+geom_point()+theme_classic()+scale_x_discrete(labels=c("<0", ">0"))+ylab("")+xlab("")
   s1 = append(s1,list(p))
+  b1 = append(b1,list(b))
 }
 
-s2 = list()
+s2 = list(); b2 = list()
 fn = system("ls ./output/*_*S2.csv.gz", intern=TRUE)
 for(i in fn[c(1,2,4,3,5,6,8,7)]) {
   gwas_out = read.csv(i, header=TRUE)
   gwas_out = gwas_out[gwas_out$P_nei<quantile(gwas_out$P_nei,0.001),]
+  gwas_out$MAF[gwas_out$MAF>0.5] = 1 - gwas_out$MAF[gwas_out$MAF>0.5]
+  print(wilcox.test(gwas_out$MAF~(gwas_out$beta_nei>0))$p.value)
   p = ggplot(gwas_out,aes(x=beta_nei))+geom_histogram()+theme_classic()+ylab("")+xlab("")
+  b = ggplot(gwas_out,aes(x=(beta_nei>0),y=MAF,group=(beta_nei>0)))+
+    geom_boxplot()+geom_point()+theme_classic()+scale_x_discrete(labels=c("<0", ">0"))+ylab("")+xlab("")
   s2 = append(s2,list(p))
+  b2 = append(b2,list(b))
 }
 
-ps1 = (s1[[1]]+ylab("No. of SNPs (J = 4)")+labs(title="(a) coef. at Zurich", subtitle="Leaf holes")) + (s1[[2]]+labs(subtitle="External feeders")) + (s1[[3]]+labs(subtitle="Internal feeders")) + (s1[[4]]+labs(subtitle="Species number"))
+# for Figure S11a
+ps1 = (s1[[1]]+ylab("No. of SNPs (J = 4)")+labs(title=substitute(paste(bold("a"),"  coef. at Zurich")), subtitle="Leaf holes")) + (s1[[2]]+labs(subtitle="External feeders")) + (s1[[3]]+labs(subtitle="Internal feeders")) + (s1[[4]]+labs(subtitle="No. of species"))
 ps2 = (s2[[1]]+ylab("No. of SNPs (J = 12)")+xlab(expression(hat(italic(beta))[2]))) + (s2[[2]]+xlab(expression(hat(italic(beta))[2]))) + (s2[[3]]+xlab(expression(hat(italic(beta))[2]))) + (s2[[4]]+xlab(expression(hat(italic(beta))[2])))
 pz = ((ps1+plot_layout(nrow=1)) / (ps2+plot_layout(nrow=1)))
 
-ps3 = (s1[[5]]+ylab("No. of SNPs (J = 4)")+labs(title="(b) coef. at Otsu", subtitle="Leaf area loss")) + (s1[[6]]+labs(subtitle="External feeders")) + (s1[[7]]+labs(subtitle="Internal feeders")) + (s1[[8]]+labs(subtitle="Species number"))
+# for Figure S11b
+ps3 = (s1[[5]]+ylab("No. of SNPs (J = 4)")+labs(title=substitute(paste(bold("b"),"  coef. at Otsu")), subtitle="Leaf area loss")) + (s1[[6]]+labs(subtitle="External feeders")) + (s1[[7]]+labs(subtitle="Internal feeders")) + (s1[[8]]+labs(subtitle="No. of species"))
 ps4 = (s2[[5]]+ylab("No. of SNPs (J = 12)")+xlab(expression(hat(italic(beta))[2]))) + (s2[[6]]+xlab(expression(hat(italic(beta))[2]))) + (s2[[7]]+xlab(expression(hat(italic(beta))[2]))) + (s2[[8]]+xlab(expression(hat(italic(beta))[2])))
 pj = ((ps3+plot_layout(nrow=1)) / (ps4+plot_layout(nrow=1)))
-
 beta2_hist = (pz | pj)
 
+# for Figure S11c
+bs1 = (b1[[1]]+ylab("MAF (J = 4)")+labs(title=substitute(paste(bold("c"),"  MAF at Zurich")), subtitle="Leaf holes")) + (b1[[2]]+labs(subtitle="External feeders")) + (b1[[3]]+labs(subtitle="Internal feeders")) + (b1[[4]]+labs(subtitle="No. of species"))
+bs2 = (b2[[1]]+ylab("MAF (J = 12)")+xlab(expression(hat(italic(beta))[2]))) + (b2[[2]]+xlab(expression(hat(italic(beta))[2]))) + (b2[[3]]+xlab(expression(hat(italic(beta))[2]))) + (b2[[4]]+xlab(expression(hat(italic(beta))[2])))
+bz = ((bs1+plot_layout(nrow=1)) / (bs2+plot_layout(nrow=1)))
 
+# for Figure S11d
+bs3 = (b1[[5]]+ylab("MAF (J = 4)")+labs(title=substitute(paste(bold("d"),"  MAF at Otsu")), subtitle="Leaf area loss")) + (b1[[6]]+labs(subtitle="External feeders")) + (b1[[7]]+labs(subtitle="Internal feeders")) + (b1[[8]]+labs(subtitle="No. of species"))
+bs4 = (b2[[5]]+ylab("MAF (J = 12)")+xlab(expression(hat(italic(beta))[2]))) + (b2[[6]]+xlab(expression(hat(italic(beta))[2]))) + (b2[[7]]+xlab(expression(hat(italic(beta))[2]))) + (b2[[8]]+xlab(expression(hat(italic(beta))[2])))
+bj = ((bs3+plot_layout(nrow=1)) / (bs4+plot_layout(nrow=1)))
+maf_hist = (bz | bj)
+
+
+# for Figure S11e
 ihs_p = ggplot(ehh_all,aes(x=IHS)) + geom_histogram() + 
-  ylab("No. of SNPs")+xlab("iHS")+theme_classic()+ggtitle("(c) Positive selection") +
+  ylab("No. of SNPs")+xlab("iHS")+theme_classic()+ggtitle(substitute(paste(bold("e"),"  Positive selection"))) +
   geom_vline(xintercept=quantile(ehh_all$IHS,0.95),lty=2)
 
+# for Figure S11f
 beta_p = ggplot(beta_all,aes(x=Beta1)) + geom_histogram() + 
-  ylab("No. of SNPs")+xlab("BetaScan")+theme_classic()+ggtitle("(d) Blancing selection") +
+  ylab("No. of SNPs")+xlab("BetaScan")+theme_classic()+ggtitle(substitute(paste(bold("f"),"  Balancing selection"))) +
   geom_vline(xintercept=quantile(beta_all$Beta1,0.95),lty=2)
 
 scan_hist = (ihs_p | beta_p)
@@ -137,8 +161,8 @@ bar$trait = factor(bar$trait,levels=repanel$trait)
 
 which(repanel$pvalue[1:4]<0.05)
 
-h1 = ggplot(bar[1:16,],aes(y=value,x=trait,fill=group))+geom_bar(stat="identity", position="dodge") + labs(title="(e) Scan at Zurich (J = 4)") +
-  theme_classic() + ylab("No. of SNPs") + xlab("") + scale_x_discrete(labels=c("Leaf holes","External feeders","Internal feeders","Species number")) +
+h1 = ggplot(bar[1:16,],aes(y=value,x=trait,fill=group))+geom_bar(stat="identity", position="dodge") + labs(title=substitute(paste(bold("g"),"  Scan at Zurich (J = 4)"))) +
+  theme_classic() + ylab("No. of SNPs") + xlab("") + scale_x_discrete(labels=c("Leaf holes","External feeders","Internal feeders","No. of species")) +
   scale_fill_manual(values=c("red", "blue", "pink","skyblue"),name="Category",
                     breaks=c("beta2Pos_EHH", "beta2Pos_Beta", "beta2Neg_EHH", "beta2Neg_Beta"),
                     labels=c(expression(iHS:italic(beta)[2]>0), expression(BETA:italic(beta)[2]>0), expression(iHS:italic(beta)[2]<0), expression(BETA:italic(beta)[2]<0))) +
@@ -146,23 +170,18 @@ h1 = ggplot(bar[1:16,],aes(y=value,x=trait,fill=group))+geom_bar(stat="identity"
   geom_text(data.frame(x=2,y=27,group=NA),mapping=aes(x=x,y=y),label="**",size=8) + 
   geom_text(data.frame(x=4,y=10,group=NA),mapping=aes(x=x,y=y),label="*",size=8) + theme(legend.position="none")
 
-saveRDS(h1,file="../figs/AraHerbSelectionScanZurich.rds")
 
 which(repanel$pvalue[5:8]<0.001)
 
-h2 = ggplot(bar[17:32,],aes(y=value,x=trait,fill=group))+geom_bar(stat="identity", position="dodge") + labs(title="(f) Scan at Otsu (J = 4)") +
-  theme_classic() + ylab("No. of SNPs") + xlab("") + scale_x_discrete(labels=c("Leaf area loss","External feeders","Internal feeders","Species number")) +
+h2 = ggplot(bar[17:32,],aes(y=value,x=trait,fill=group))+geom_bar(stat="identity", position="dodge") + labs(title=substitute(paste(bold("h"),"  Scan at Otsu (J = 4)"))) +
+  theme_classic() + ylab("No. of SNPs") + xlab("") + scale_x_discrete(labels=c("Leaf area loss","External feeders","Internal feeders","No. of species")) +
   scale_fill_manual(values=c("red", "blue", "pink","skyblue"),name="Category",
                     breaks=c("beta2Pos_EHH", "beta2Pos_Beta", "beta2Neg_EHH", "beta2Neg_Beta"),
                     labels=c(expression(iHS:italic(beta)[2]>0), expression(BETA:italic(beta)[2]>0), expression(iHS:italic(beta)[2]<0), expression(BETA:italic(beta)[2]<0))) +
   geom_text(data.frame(x=1,y=27,group=NA),mapping=aes(x=x,y=y),label="***",size=8) + theme(legend.position=c(0.9,0.9))
 
-saveRDS(h2,file="../figs/AraHerbSelectionScanOtsu.rds")
-
+# for Figure S11g-h
 scan_bar1 = (h1 | h2)
-saveRDS(scan_bar1,file="../figs/SelectionSNPno.rds")
-
-ggsave(scan_bar1,filename="../figs/SelectionSNPno.pdf",width=16,height=4)
 
 
 # repanel (J=12)
@@ -181,8 +200,8 @@ bar$trait = factor(bar$trait,levels=repanel$trait)
 
 which(repanel$pvalue[1:4]<0.05)
 
-h1 = ggplot(bar[1:16,],aes(y=value,x=trait,fill=group))+geom_bar(stat="identity", position="dodge") + labs(title="(g) Scan at Zurich (J = 12)") +
-  theme_classic() + ylab("No. of SNPs") + xlab("") + scale_x_discrete(labels=c("Leaf holes","External feeders","Internal feeders","Species number")) +
+h1 = ggplot(bar[1:16,],aes(y=value,x=trait,fill=group))+geom_bar(stat="identity", position="dodge") + labs(title=substitute(paste(bold("i"),"  Scan at Zurich (J = 12)"))) +
+  theme_classic() + ylab("No. of SNPs") + xlab("") + scale_x_discrete(labels=c("Leaf holes","External feeders","Internal feeders","No. of species")) +
   scale_fill_manual(values=c("red", "blue", "pink","skyblue"),name="Category",
                     breaks=c("beta2Pos_EHH", "beta2Pos_Beta", "beta2Neg_EHH", "beta2Neg_Beta"),
                     labels=c(expression(iHS:italic(beta)[2]>0), expression(BETA:italic(beta)[2]>0), expression(iHS:italic(beta)[2]<0), expression(BETA:italic(beta)[2]<0))) +
@@ -190,15 +209,16 @@ h1 = ggplot(bar[1:16,],aes(y=value,x=trait,fill=group))+geom_bar(stat="identity"
 
 which(repanel$pvalue[5:8]<0.001)
 
-h2 = ggplot(bar[17:32,],aes(y=value,x=trait,fill=group))+geom_bar(stat="identity", position="dodge") + labs(title="(h) Scan at Otsu (J = 12)") +
-  theme_classic() + ylab("No. of SNPs") + xlab("") + scale_x_discrete(labels=c("Leaf area loss","External feeders","Internal feeders","Species number")) +
+h2 = ggplot(bar[17:32,],aes(y=value,x=trait,fill=group))+geom_bar(stat="identity", position="dodge") + labs(title=substitute(paste(bold("j"),"  Scan at Otsu (J = 12)"))) +
+  theme_classic() + ylab("No. of SNPs") + xlab("") + scale_x_discrete(labels=c("Leaf area loss","External feeders","Internal feeders","No. of species")) +
   scale_fill_manual(values=c("red", "blue", "pink","skyblue"),name="Category",
                     breaks=c("beta2Pos_EHH", "beta2Pos_Beta", "beta2Neg_EHH", "beta2Neg_Beta"),
                     labels=c(expression(iHS:italic(beta)[2]>0), expression(BETA:italic(beta)[2]>0), expression(iHS:italic(beta)[2]<0), expression(BETA:italic(beta)[2]<0))) +
   geom_text(data.frame(x=4,y=35,group=NA),mapping=aes(x=x,y=y),label="***",size=8) + theme(legend.position="none")
 
+# for Figure S11i-j
 scan_bar2 = (h1 | h2)
 
 # Figure S11
-scan_p = (beta2_hist / scan_hist / scan_bar1 / scan_bar2) + plot_layout(heights = c(2,1,1,1))
-ggsave(scan_p, filename="../figs/AraHerbSelectionScan.pdf",width=18,height=16)
+scan_p = (beta2_hist / maf_hist / scan_hist / scan_bar1 / scan_bar2) + plot_layout(heights=c(2,2,1,1,1))
+ggsave(scan_p, filename="../figs/AraHerbSelectionScan.pdf",width=18,height=18)

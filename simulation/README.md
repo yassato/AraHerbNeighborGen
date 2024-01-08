@@ -1,4 +1,4 @@
-# Performance test for Neighbor GWAS using simulated data
+# Numerical analysis and simulations for Neighbor GWAS  
 
 ## File description
 
@@ -9,4 +9,13 @@ R script to generate simulated data and test the performance.
 R script for numerical examples of the Ising model and phenotype functions.  
 
 - Ara250kRegMap\_chr12\_MAF10.rds  
-Binary format R dataset (.rds) neccesary for simulations.
+Binary format R dataset (.rds) neccesary for simulations.  
+
+- pve.rds  
+An output file of the PVE simulation.  
+
+- pK.rds  
+An output file of the GWAS simulation without $\mathbf{K}_2$.  
+
+- slopes.rds  
+An output file for the slope analysis of simulated QQ plots.  
