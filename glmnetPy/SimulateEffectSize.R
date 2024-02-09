@@ -121,7 +121,7 @@ b = b + geom_text(data.frame(x=2.2,y=y3+0.1),mapping=aes(x=x,y=y),label="Bla-1 v
 # export for main Figure 4c
 saveRDS(b,file="../figs/SimEffmain.rds",compress=TRUE,version=2)
 
-
+#####################
 # positive pairs only
 relativeDam = read.csv(file=paste0(coef_path, f_name,"_relativeDam_nstd.csv"))
 posIDs = subset(relativeDam,relativeDam_i>0)
@@ -178,7 +178,7 @@ m = apply(eff_sim,2,mean)
 er = apply(eff_sim,2,sd)
 
 df2 = data.frame(x=c(1,2,4,8), y=m)
-b <- ggplot(data=df2, aes(x=x, y=m)) + geom_line() + geom_point() +
+b = ggplot(data=df2, aes(x=x, y=m)) + geom_line() + geom_point() +
   ylab("Simulated damage") + xlab("No. of genotypes") + xlim(1,8) +
   geom_errorbar(aes(ymax=m+er, ymin=m-er),width=0.0) + theme_classic()
 
@@ -204,6 +204,6 @@ b = b + geom_text(data.frame(x=4,y=y3),mapping=aes(x=x,y=y),label="<- Bla-1 vs. 
   geom_text(data.frame(x=4,y=y1),mapping=aes(x=x,y=y),label="<- Bg-2 vs. Uod-1",angle=0,size=3) +
   geom_point(data.frame(x=2,y=y1),mapping=aes(x=x,y=y),pch=1)
 
-# export for Figure S13f
+# export for Figure S11f
 saveRDS(b,file="../figs/SimEffsupp.rds",compress=TRUE,version=2)
 

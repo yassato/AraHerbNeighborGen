@@ -32,12 +32,14 @@ p4 = p4 + labs(subtitle=bquote(beta[0]*" = 0.5; "*beta[1]*" = 0.05; "*beta[2]*" 
 
 p = (p1 | p2) / (p3 | p4)
 
+# Figure 1a right
 ggsave(p1,filename="../figs/FDSinbred.pdf",width=2.5,height=2.5)
-# ggsave(p,filename="../figs/FDSinbredSupp.pdf",width=6,height=6)
 
 
+########################
+# Ising model simulation
 
-#define functions
+# define functions
 XiXj1 = function(id,dmat,range) {
   xi = Xi[id]
   if(xi==0) { xi = 1 } else { xi = xi }
@@ -47,11 +49,11 @@ XiXj1 = function(id,dmat,range) {
   return(xi*sum(xj))
 }
 
-#set coefficients
+# set coefficients
 J = 0.2 #= beta_2
 h = 0.0001 #= beta_1
 
-#set a field
+# set a field
 rect = 100
 N = rect*rect
 Xi = sample(c(-1,1),N,replace=T)
@@ -68,7 +70,7 @@ xixj = c()
 for(i in 1:N) xixj = c(xixj, XiXj1(i,dmat=dmat,range=sqrt(2)))
 Ei_t0 = (J*xixj+h*Xi)
 
-#MCMC by Gibbs sampling
+# MCMC by Gibbs sampling
 set.seed(1234)
 for(j in 1:100) {
   Xi_t0 = Xi
@@ -80,7 +82,7 @@ for(j in 1:100) {
     if(xi==0) { xi = 1 }
     Ei = -(J*XiXj1(i,dmat=dmat,range=sqrt(8))+h*xi) #set the energy negative to minimize itself
     
-    #Metropolis algorithm
+    # Metropolis algorithm
     if(Ei_t0[i]<=Ei) {
       Xi[i] = Xi[i]; Ei_t0[i] = Ei
     } else if(runif(1,0,1)<exp(Ei-Ei_t0[i])) {
@@ -110,7 +112,7 @@ ip2 = ggplot(d2,aes(x=x,y=y,fill=z)) + geom_tile(color="grey50") +
 ip = (ip1 | ip2) + plot_annotation(tag_levels = "a")
 ipp = (ip1 | ip2) / (p1 | p2) / (p3 | p4) + plot_annotation(tag_levels = "a")
 
-# Figure S6
+# Figure S7
 ggsave(ipp,filename="../figs/IsingFDS.pdf",width=6,height=8)
 
 

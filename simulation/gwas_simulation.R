@@ -50,7 +50,7 @@ pves = readRDS("./simulation/pve.rds")
 
 scales = c(sqrt(2),sqrt(8),sqrt(18),sqrt(32),sqrt(50),sqrt(72),sqrt(128),sqrt(162))
 
-# Figure S8
+# Figure S15
 pdf(file="../figs/slopePVEsimu.pdf",width=8,height=4)
 par(mfcol=(c(1,2)))
 plot(round(scales,2),slopes[1,],type="b",ylim=c(0.5,1.5),las=1,
@@ -130,7 +130,7 @@ pr8 = ggplot(NULL,aes(x=af,y=r_mat[,8])) + geom_point(alpha=0.1) + theme_classic
   labs(subtitle=paste0("spatial distance = ",round(as.numeric(colnames(r_mat)[8]),2))) + 
   xlab("allele frequency") + ylab("Pearson's correlation coef.") + geom_smooth(method="gam")
 
-# Figure S7
+# Figure S14
 pr_all = (pr1 | pr2 | pr3 | pr4) / (pr5 | pr6 | pr7 | pr8)
 ggsave(pr_all,filename="../figs/cor_af.jpg",width=10,height=5,dpi=300)
 
@@ -189,6 +189,10 @@ for(i in 1:30) {
 
 saveRDS(coef,file="./simulation/pK.rds")
 
+## copy & paste from source data of Fig. S9 to draw the same figure
+# d = read.table(pipe("pbpaste"),header=TRUE)
+# p1 = 10^(-d$y1); p2 = 10^(-d$y2)
+
 x1 = -log(ppoints(length(p1)),10)
 y1 = -log(sort(p1,decreasing=FALSE),10)
 slope1 = coef(lm(y1~x1))
@@ -214,10 +218,10 @@ dK2 = read.csv("./output/CHZneigGWAS_HolesS1_wo_K2.csv.gz",header=TRUE)
 p = dK2$p1
 x = -log(ppoints(length(p)),10)
 y = -log(sort(p,decreasing=FALSE),10)
-qqK2 = ggplot(NULL,aes(x=x,y=y)) + geom_point(alpha=0.2) + geom_abline(slope=1,intercept=0,lty=2) + labs(subtitle="Leaf holes") +
+qqK2 = ggplot(NULL,aes(x=x,y=y)) + geom_point(alpha=0.2) + geom_abline(slope=1,intercept=0,lty=2) + labs(subtitle="Herbivore damage (Leaf holes)") +
   theme_classic() + xlab(expression("Expected "*-log[10](p))) + ylab(expression("Observed "*-log[10](p)))
 
-# Figure S9
+# Figure S16
 bpK2 = (bp | qqKsim | qqK2) + plot_annotation(tag_level="a")
 ggsave(bpK2,filename="../figs/bp_qqK2.jpg",width=12,height=4,dpi=300)
 

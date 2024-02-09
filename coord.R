@@ -3,13 +3,16 @@ coord = function(chr, pos) {
   chr <- as.factor(chr)
   coord <- 0
   M <- 0
+  tic <- numeric(nlevels(chr))
   for (i in 1:nlevels(chr)) {
-    w <- (chr == levels(chr)[i])
-    pos.c <- pos[w]
-    coord[w] <- M + pos.c
-    mx <- max(pos.c)
-    M <- M + mx
-  }
+            w <- (chr == levels(chr)[i])
+            pos.c <- pos[w]
+            coord[w] <- M + pos.c
+            mx <- max(pos.c)
+            tic[i] <- M + mx/2
+            M <- M + mx
+            }
   coord <- coord/M
-  return(coord)
+  tic <- tic/M
+  return(list(coord=coord,tic=tic))
 }

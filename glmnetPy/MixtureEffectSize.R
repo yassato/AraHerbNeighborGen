@@ -51,7 +51,6 @@ colnames(poly_mat) = colnames(geno_d)
 rownames(poly_mat) = colnames(geno_d)
 
 std_poly_mat = (poly_mat - mean(poly_mat))/sd(poly_mat)
-#write.csv(std_poly_mat,file=paste0(f_name,"_stdNeiDamMat.csv"),quote=FALSE)
 
 relativeDam = function(geno_i, geno_j) {
   genoi_relativeDam = std_poly_mat[geno_i, geno_i] - std_poly_mat[geno_i, geno_j]
@@ -99,9 +98,6 @@ for(i in relativeDamTable$geno_j) {
 
 relativeDamTable = data.frame(name_i, name_j, relativeDamTable)
 
-# write.csv(relativeDamTable, file=paste0(coef_path, f_name,"_relativeDam.csv"), row.names=FALSE, quote=FALSE)
-
-
 # histogram of effect size
 damhist = ggplot(relativeDamTable,aes(x=relativeDam_i)) + geom_histogram(binwidth=0.05) +
   theme_classic() + ylab("No. of genotype pairs") + xlab("Estimated effect size") +
@@ -134,7 +130,7 @@ mantel(std_poly_mat,gmat,permutations=999)
 mantel.partial(std_poly_mat,gmat,K,permutations=999)
 mantel.partial(std_poly_mat,K,gmat,permutations=999)
 
-# for Figure S13c
+# for Figure S11c
 eff_img = std_poly_mat %>% 
   as.data.frame() %>%
   rownames_to_column("f_id") %>%
@@ -148,15 +144,15 @@ eff_img = std_poly_mat %>%
         axis.text.y = element_blank()) +
   ylab("accession i") + xlab("accession j")
 
-# for Figure S13d
+# for Figure S11d
 genp = ggplot(NULL,aes(x=K[upper.tri(K)],y=std_poly_mat[upper.tri(std_poly_mat)])) + geom_point(alpha=0.1) +
   theme_classic() + ylab("Esitimated effect size of mixing") + xlab("Genetic distance")
 
-# for Figure S13e
+# for Figure S11e
 geop = ggplot(NULL,aes(x=gmat[upper.tri(gmat)],y=std_poly_mat[upper.tri(std_poly_mat)])) + geom_point(alpha=0.1) +
   theme_classic() + ylab("Estimated effect size of mixing") + xlab("Geographical distance")
 
-# load Figure S13f
+# load Figure S11f
 simp = readRDS(file="../figs/SimEffsupp.rds")
 
 temp_avg = readRDS("../output/temp_avg.rds")
@@ -171,6 +167,6 @@ cor.test(temp_avg[-c(195:199),]$x, temp_avg[-c(195:199),]$y)
 
 saveRDS(avgp,file="../figs/avgp.rds")
 
-# composite for Figure S13c-f
+# composite for Figure S11c-f
 eff_biplot = (eff_img + ggtitle(substitute(paste(bold("c"))))) | (genp + ggtitle(substitute(paste(bold("d"))))) | (geop + ggtitle(substitute(paste(bold("e"))))) | (simp + ggtitle(substitute(paste(bold("f")))))
 saveRDS(eff_biplot,file="../figs/EffectSizeBiplot.rds",compress=TRUE,version=2)

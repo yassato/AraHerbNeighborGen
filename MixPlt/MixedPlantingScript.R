@@ -84,7 +84,7 @@ bs4 = ggplot(subset(d,Year=="2021"&Density=="High"),aes(x=factor(Line:MonoPoly),
   geom_text(data.frame(x=c(1.5,5.5),y=rep(150,2)),mapping=aes(x=x,y=y),label="***",size=6) + geom_text(data.frame(x=3.5,y=150),mapping=aes(x=x,y=y),label="*",size=6) +
   geom_text(data.frame(x=c(1:12),y=rep(1,12)),mapping=aes(x=x,y=y),label=paste0("(",aggregate(hole~MonoPoly+Line,subset(d,Year=="2021"&Density=="High"),length)[,3],")"))
 
-# Figure S14a-d
+# Figure S12a-d
 bs = bs1+bs2+bs3+bs4
 ggsave(bs,filename="MixedPlantingSeparated.pdf",width=12,height=9)
 
