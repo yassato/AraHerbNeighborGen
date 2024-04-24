@@ -40,8 +40,8 @@ b1 = ggplot(data=df,aes(x=reorder(names,-no),y=no)) +
   geom_bar(stat="identity",fill=c("green","blue","blue","green","blue","darkgray","green","green","green","blue")) + 
   theme_classic() + ylab("No. of individuals") + xlab("") + ggtitle("Zurich 2017") + 
   scale_y_log10() + theme(axis.text.x=element_text(angle=90)) + 
-  geom_label(data.frame(x=8,y=1000),mapping=aes(x=x,y=y),label="External feeder",size=2,fill="lightgreen",hjust=0) +
-  geom_label(data.frame(x=8,y=200),mapping=aes(x=x,y=y),label="Internal feeder",size=2,fill="skyblue",hjust=0) + 
+  geom_label(data.frame(x=8,y=1000),mapping=aes(x=x,y=y),label="Chewer",size=2,fill="lightgreen",hjust=0) +
+  geom_label(data.frame(x=8,y=200),mapping=aes(x=x,y=y),label="Sucker",size=2,fill="skyblue",hjust=0) + 
   geom_label(data.frame(x=8,y=40),mapping=aes(x=x,y=y),label="Carnivore",size=2,fill="gray",hjust=0)
 
 df = sort(apply(com2017[1:1600,],2,sum), decreasing=TRUE)[1:10]
@@ -94,11 +94,11 @@ h1 = ggplot(data=subset(d, Site=="ZH"),aes(x=Holes)) + geom_histogram() +
   theme_classic() + labs(title=substitute(paste(bold("a"),"  Zurich")),subtitle="Herbivore damage (Leaf holes)") + #scale_x_log10() +
   xlab("No. of leaf holes per plant") + ylab("No. of plants")
 h2 = ggplot(data=subset(d, Site=="ZH"),aes(x=chewer)) + geom_histogram(binwidth=1) +
-  theme_classic() + labs(title=substitute(paste(bold("b"))),subtitle="Individual no. of external feeders") + #scale_x_log10() +
-  xlab("Individual no. of external feeders per plant") + ylab("No. of plants")
+  theme_classic() + labs(title=substitute(paste(bold("b"))),subtitle="Individual no. of external chewers") + #scale_x_log10() +
+  xlab("Individual no. of external chewers per plant") + ylab("No. of plants")
 h3 = ggplot(data=subset(d, Site=="ZH"),aes(x=sucker)) + geom_histogram(binwidth=1) +
-  theme_classic() + labs(title=substitute(paste(bold("c"))),subtitle="Individual no. of internal feeders") + #scale_x_log10() +
-  xlab("Individual no. of internal feeders per plant") + ylab("No. of plants")
+  theme_classic() + labs(title=substitute(paste(bold("c"))),subtitle="Individual no. of other herbivores") + #scale_x_log10() +
+  xlab("Individual no. of other herbivores per plant") + ylab("No. of plants")
 h4 = ggplot(data=subset(d, Site=="ZH"),aes(x=richness)) + geom_histogram(binwidth=1) +
   theme_classic() + labs(title=substitute(paste(bold("d"))),subtitle="Total no. of insect species") + #scale_x_log10() +
   xlab("Total no. of insect species per plant") + ylab("No. of plants")
@@ -113,11 +113,11 @@ h7 = ggplot(data=subset(d, Site=="JP"),aes(x=Score)) + geom_histogram(binwidth=1
   theme_classic() + ggtitle(substitute(paste(bold("i"),"  Otsu"))) + labs(subtitle="Herbivore damage (Leaf area loss)") +
   xlab("Leaf area loss (score) per plant") + ylab("No. of plants")
 h8 = ggplot(data=subset(d, Site=="JP"),aes(x=chewer)) + geom_histogram(binwidth=1) + # scale_x_log10() + 
-  labs(title=substitute(paste(bold("j"))),subtitle="Individual no. of external feeders") + theme_classic() + 
-  xlab("Individual no. of external feeders per plant") + ylab("No. of plants")
+  labs(title=substitute(paste(bold("j"))),subtitle="Individual no. of external chewers") + theme_classic() + 
+  xlab("Individual no. of external chewers per plant") + ylab("No. of plants")
 h9 = ggplot(data=subset(d, Site=="JP"),aes(x=sucker)) + geom_histogram(binwidth=1) + # scale_x_log10() + 
-  labs(title=substitute(paste(bold("k"))),subtitle="Individual no. of internal feeders") + theme_classic() + 
-  xlab("Individual no. of internal feeders per plant") + ylab("No. of plants")
+  labs(title=substitute(paste(bold("k"))),subtitle="Individual no. of other herbivores") + theme_classic() + 
+  xlab("Individual no. of other herbivores per plant") + ylab("No. of plants")
 h10 = ggplot(data=subset(d, Site=="JP"),aes(x=richness)) + geom_histogram(binwidth=1) + # scale_x_log10() + 
   labs(title=substitute(paste(bold("l"))),subtitle="Total no. of insect species") + theme_classic() + 
   xlab("Total no. of insect species per plant") + ylab("No. of plants")
@@ -188,11 +188,11 @@ bar1 = ggplot(NULL,aes(x=factor(c(0,4,12)),y=pveZH[1:3])) + geom_col() +
 bar2 = ggplot(NULL,aes(x=factor(c(0,4,12)),y=pveZH[10:12])) + geom_col() +
   ylim(0,1) + ylab("") + xlab("No. of neighbors") + theme_classic() +
   geom_text(data.frame(x=c(1.5,2.5),y=c(0.25,0.25)),mapping=aes(x=x,y=y),label="*",size=6) +
-  labs(subtitle="Individual no. of external feeders")
+  labs(subtitle="Individual no. of external chewers")
 
 bar3 = ggplot(NULL,aes(x=factor(c(0,4,12)),y=pveZH[7:9])) + geom_col() +
   ylim(0,1) + ylab("") + xlab("No. of neighbors") + theme_classic() +
-  labs(subtitle="Individual no. of internal feeders")
+  labs(subtitle="Individual no. of other herbivores")
 
 bar4 = ggplot(NULL,aes(x=factor(c(0,4,12)),y=pveZH[13:15])) + geom_col() +
   ylim(0,1) + ylab("") + xlab("No. of neighbors") + theme_classic() +
@@ -210,12 +210,12 @@ bar1 = ggplot(NULL,aes(x=factor(c(0,4,12)),y=pveJP[1:3])) + geom_col() +
 
 bar2 = ggplot(NULL,aes(x=factor(c(0,4,12)),y=pveJP[10:12])) + geom_col() +
   ylim(0,1) + ylab("") + xlab("No. of neighbors") + theme_classic() +
-  labs(subtitle="Individual no. of external feeders")
+  labs(subtitle="Individual no. of external chewers")
 
 bar3 = ggplot(NULL,aes(x=factor(c(0,4,12)),y=pveJP[7:9])) + geom_col() +
   ylim(0,1) + ylab("") + xlab("No. of neighbors") + theme_classic() +
   geom_text(data.frame(x=1.5,y=0.2),mapping=aes(x=x,y=y),label="*",size=6) +
-  labs(subtitle="Individual no. of internal feeders")
+  labs(subtitle="Individual no. of other herbivores")
 
 bar4 = ggplot(NULL,aes(x=factor(c(0,4,12)),y=pveJP[13:15])) + geom_col() +
   ylim(0,1) + ylab("") + xlab("No. of neighbors") + theme_classic() +
@@ -226,7 +226,7 @@ barj = bar1 | bar2 | bar3 | bar4
 
 # Figure S3
 bar_pve = barz / barj
-ggsave(bar_pve,filename="../figs/PVEsupp.pdf",width=12,height=8,bg="transparent")
+ggsave(bar_pve,filename="../figs/PVEsupp.pdf",width=12,height=6,bg="transparent")
 
 
 # PVE barplot (J=4)
@@ -236,11 +236,11 @@ bar1 = ggplot(NULL,aes(x=factor(c("focal","focal+neig."),levels=c("focal","focal
   geom_text(data.frame(x=1.5,y=0.55),mapping=aes(x=x,y=y),label="***",size=8)
 
 bar2 = ggplot(NULL,aes(x=factor(c("focal","focal+neig."),levels=c("focal","focal+neig.")),y=pveZH[10:11])) + geom_col(width=0.7) +
-  ylim(0,1) + ylab("PVE") + xlab("") + theme_classic() + labs(title=substitute(paste(bold("f"))), subtitle="Individual no. of external feeders") +
+  ylim(0,1) + ylab("PVE") + xlab("") + theme_classic() + labs(title=substitute(paste(bold("f"))), subtitle="Individual no. of external chewers") +
   geom_text(data.frame(x=1.5,y=0.25),mapping=aes(x=x,y=y),label="*",size=8) 
 
 bar3 = ggplot(NULL,aes(x=factor(c("focal","focal+neig."),levels=c("focal","focal+neig.")),y=pveZH[7:8])) + geom_col(width=0.7) +
-  ylim(0,1) + ylab("PVE") + xlab("") + theme_classic() + labs(title=substitute(paste(bold("g"))), subtitle="Individual no. of internal feeders")
+  ylim(0,1) + ylab("PVE") + xlab("") + theme_classic() + labs(title=substitute(paste(bold("g"))), subtitle="Individual no. of other herbivores")
 
 bar4 = ggplot(NULL,aes(x=factor(c("focal","focal+neig."),levels=c("focal","focal+neig.")),y=pveZH[13:14])) + geom_col(width=0.7) +
   ylim(0,1) + ylab("PVE") + xlab("") + theme_classic() + labs(title=substitute(paste(bold("h"))), subtitle="Total no. of insect species") + 
@@ -257,10 +257,10 @@ bar1 = ggplot(NULL,aes(x=factor(c("focal","focal+neig."),levels=c("focal","focal
   geom_text(data.frame(x=1.5,y=0.30),mapping=aes(x=x,y=y),label="**",size=8) 
 
 bar2 = ggplot(NULL,aes(x=factor(c("focal","focal+neig."),levels=c("focal","focal+neig.")),y=pveJP[10:11])) + geom_col(width=0.7) +
-  ylim(0,1) + ylab("PVE") + xlab("") + theme_classic() + labs(title=substitute(paste(bold("n"))), subtitle="Individual no. of external feeders")
+  ylim(0,1) + ylab("PVE") + xlab("") + theme_classic() + labs(title=substitute(paste(bold("n"))), subtitle="Individual no. of external chewers")
 
 bar3 = ggplot(data=NULL,aes(x=factor(c("focal","focal+neig."),levels=c("focal","focal+neig.")),y=pveJP[7:8])) + geom_col(width=0.7) +
-  ylim(0,1) + ylab("PVE") + xlab("") + theme_classic() + labs(title=substitute(paste(bold("o"))), subtitle="Individual no. of internal feeders") +
+  ylim(0,1) + ylab("PVE") + xlab("") + theme_classic() + labs(title=substitute(paste(bold("o"))), subtitle="Individual no. of other herbivores") +
   geom_text(data.frame(x=1.5,y=0.2),mapping=aes(x=x,y=y),label="*",size=8)
 
 bar4 = ggplot(NULL,aes(x=factor(c("focal","focal+neig."),levels=c("focal","focal+neig.")),y=pveJP[13:14])) + geom_col(width=0.7) +
@@ -275,3 +275,4 @@ j = ((h7 | bar1) + plot_layout(widths=c(2.5,1))) /
 # main Figure 2
 ggsave(z,filename="../figs/PVE_Zurich.pdf",width=9.5,height=9.5,bg="transparent")
 ggsave(j,filename="../figs/PVE_Otsu.pdf",width=9.5,height=9.5,bg="transparent")
+

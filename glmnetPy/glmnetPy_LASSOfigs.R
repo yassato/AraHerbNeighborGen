@@ -82,7 +82,7 @@ p2 = ggplot(NULL,aes(x=log(lz$chewerS1CHZ_lambda),y=dz$chewer_bothS1)) + geom_li
   geom_line(aes(x=log(lz$HolesS2CHZ_lambda),y=dz$chewer_bothS2),colour="skyblue",lwd=0.8) +
   geom_line(aes(x=log(lz$chewerCHZself_lambda),y=dz$chewer_self),colour="grey",lwd=1,lty=2) + 
   theme_classic() + ylab(expression(rho)) + xlab(expression(log(lambda))) + ylim(0,maxy) + 
-  labs(title=substitute(paste(bold("b"))),subtitle="Individual no. of external feeders")
+  labs(title=substitute(paste(bold("b"))),subtitle="Individual no. of external chewers")
 
 # sucker
 maxy = max(c(dz$sucker_bothS1,dz$sucker_bothS2,dz$sucker_bothS3,dz$sucker_self),na.rm=TRUE)
@@ -90,7 +90,7 @@ p3 = ggplot(NULL,aes(x=log(lz$suckerS1CHZ_lambda),y=dz$sucker_bothS1)) + geom_li
   geom_line(aes(x=log(lz$suckerS2CHZ_lambda),y=dz$sucker_bothS2),colour="skyblue",lwd=0.8) +
   geom_line(aes(x=log(lz$suckerCHZself_lambda),y=dz$sucker_self),colour="grey",lwd=1,lty=2) + 
   theme_classic() + ylab(expression(rho)) + xlab(expression(log(lambda))) + ylim(0,maxy) + 
-  labs(title=substitute(paste(bold("c"))),subtitle="Individual no. of internal feeders")
+  labs(title=substitute(paste(bold("c"))),subtitle="Individual no. of other herbivores")
 
 # richness
 maxy = max(c(dz$richness_bothS1,dz$richness_bothS2,dz$richness_bothS3,dz$richness_self),na.rm=TRUE)
@@ -118,7 +118,7 @@ p6 = ggplot(NULL,aes(x=log(lj$chewerS1JPN_lambda),y=dj$chewer_bothS1)) + geom_li
   geom_line(aes(x=log(lj$chewerS2JPN_lambda),y=dj$chewer_bothS2),colour="skyblue",lwd=0.8) +
   geom_line(aes(x=log(lj$chewerJPNself_lambda),y=dj$chewer_self),colour="grey",lwd=1,lty=2) + 
   theme_classic() + ylab(expression(rho)) + xlab(expression(log(lambda))) + ylim(0,maxy) + 
-  labs(title=substitute(paste(bold("f"))),subtitle="Individual no. of external feeders")
+  labs(title=substitute(paste(bold("f"))),subtitle="Individual no. of external chewers")
 
 # sucker
 maxy = max(c(dj$sucker_bothS1,dj$sucker_bothS2,dj$sucker_self),na.rm=TRUE)
@@ -126,7 +126,7 @@ p7 = ggplot(NULL,aes(x=log(lj$suckerS1JPN_lambda),y=dj$sucker_bothS1)) + geom_li
   geom_line(aes(x=log(lj$suckerS2JPN_lambda),y=dj$sucker_bothS2),colour="skyblue",lwd=0.8) +
   geom_line(aes(x=log(lj$suckerJPNself_lambda),y=dj$sucker_self),colour="grey",lwd=1,lty=2) + 
   theme_classic() + ylab(expression(rho)) + xlab(expression(log(lambda))) + ylim(0,maxy) + 
-  labs(title=substitute(paste(bold("g"))),subtitle="Individual no. of internal feeders")
+  labs(title=substitute(paste(bold("g"))),subtitle="Individual no. of other herbivores")
 
 # richness
 maxy = max(c(dj$richness_bothS1,dj$richness_bothS2,dj$richness_self),na.rm=TRUE)
@@ -138,5 +138,5 @@ p8 = ggplot(NULL,aes(x=log(lj$richnessS1JPN_lambda),y=dj$richness_bothS1)) + geo
 
 # Figure S10
 rho_p = (p1 | p2 | p3 | p4) / (p5 | p6 | p7 | p8)
-ggsave(rho_p,filename="../figs/CV2019rho.pdf",height=8,width=12)
+ggsave(rho_p,filename="../figs/CV2019rho.pdf",height=8,width=14)
 

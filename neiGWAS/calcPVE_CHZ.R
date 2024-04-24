@@ -101,3 +101,4 @@ colnames(resList) = c("sigma_1","sigma_2","sigma_e","LL")
 
 write.csv(resList,"../output/CHZoutS1.csv",row.names=FALSE)
 
+

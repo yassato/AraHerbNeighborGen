@@ -160,10 +160,9 @@ avgp = ggplot(temp_avg,mapping=aes(x=x,y=y)) +
   geom_point() + theme_classic() + 
   ylab("Avg. estimated effect size") + xlab("Est. damage under monoculture") +
   geom_smooth(method=lm,se=TRUE) +
-  geom_text(data.frame(x=1.5,y=-0.4),mapping=aes(x=x,y=y),label=paste0("r = ",round(cor(temp_avg$x, temp_avg$y),2),"***"),size=4)
+  geom_text(data.frame(x=1.5,y=-0.4),mapping=aes(x=x,y=y),label=paste0("rho = ",round(cor(temp_avg$x, temp_avg$y,method="spearman"),2),"***"),size=4)
 
-cor.test(temp_avg$x, temp_avg$y)
-cor.test(temp_avg[-c(195:199),]$x, temp_avg[-c(195:199),]$y)
+cor.test(temp_avg$x, temp_avg$y, method="spearman")
 
 saveRDS(avgp,file="../figs/avgp.rds")
 

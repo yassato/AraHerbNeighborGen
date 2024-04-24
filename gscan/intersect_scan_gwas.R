@@ -104,20 +104,20 @@ for(i in fn[c(1,2,4,3,5,6,8,7)]) {
 
 # for Figure S8a-h
 beta2maf_hist = ((s2[[1]]+labs(title=substitute(paste(bold("a"),"  coef. at Zurich")), subtitle="Herbivore damage (Leaf holes)")) | 
-  (s2[[2]]+labs(title=substitute(paste(bold("b"))),subtitle="Individual no. of external feeders")) |
-  (s2[[3]]+labs(title=substitute(paste(bold("c"))),subtitle="Individual no. of internal feeders")) | 
+  (s2[[2]]+labs(title=substitute(paste(bold("b"))),subtitle="Individual no. of external chewers")) |
+  (s2[[3]]+labs(title=substitute(paste(bold("c"))),subtitle="Individual no. of other herbivores")) | 
   (s2[[4]]+labs(title=substitute(paste(bold("d"))),subtitle="Total no. of insect species"))) /
   ((s2[[5]]+labs(title=substitute(paste(bold("e"),"  coef. at Otsu")), subtitle="Herbivore damage (Leaf area loss)")) | 
-  (s2[[6]]+labs(title=substitute(paste(bold("f"))),subtitle="Individual no. of external feeders")) |
-  (s2[[7]]+labs(title=substitute(paste(bold("g"))),subtitle="Individual no. of internal feeders")) | 
+  (s2[[6]]+labs(title=substitute(paste(bold("f"))),subtitle="Individual no. of external chewers")) |
+  (s2[[7]]+labs(title=substitute(paste(bold("g"))),subtitle="Individual no. of other herbivores")) | 
   (s2[[8]]+labs(title=substitute(paste(bold("h"))),subtitle="Total no. of insect species"))) /
   ((b2[[1]]+labs(title=substitute(paste(bold("i"),"  MAF at Zurich")), subtitle="Herbivore damage (Leaf holes)")) |
-  (b2[[2]]+labs(title=substitute(paste(bold("j"))),subtitle="Individual no. of external feeders")) |
-  (b2[[3]]+labs(title=substitute(paste(bold("k"))),subtitle="Individual no. of internal feeders")) |
+  (b2[[2]]+labs(title=substitute(paste(bold("j"))),subtitle="Individual no. of external chewers")) |
+  (b2[[3]]+labs(title=substitute(paste(bold("k"))),subtitle="Individual no. of other herbivores")) |
   (b2[[4]]+labs(title=substitute(paste(bold("l"))),subtitle="Total no. of insect species"))) /
   ((b2[[5]]+labs(title=substitute(paste(bold("m"),"  MAF at Otsu")), subtitle="Herbivore damage (Leaf area loss)")) |
-  (b2[[6]]+labs(title=substitute(paste(bold("n"))),subtitle="Individual no. of external feeders")) |
-  (b2[[7]]+labs(title=substitute(paste(bold("o"))),subtitle="Individual no. of internal feeders")) |
+  (b2[[6]]+labs(title=substitute(paste(bold("n"))),subtitle="Individual no. of external chewers")) |
+  (b2[[7]]+labs(title=substitute(paste(bold("o"))),subtitle="Individual no. of other herbivores")) |
   (b2[[8]]+labs(title=substitute(paste(bold("p"))),subtitle="Total no. of insect species")))
 
 ggsave(beta2maf_hist, filename="../figs/mafhistJ12.pdf",width=12,height=12)
@@ -156,23 +156,23 @@ bar$trait = factor(bar$trait,levels=repanel$trait)
 which(repanel$pvalue[1:4]<0.05)
 
 h1 = ggplot(bar[1:16,],aes(y=value,x=trait,fill=group))+geom_bar(stat="identity", position="dodge") + labs(title=substitute(paste(bold("c"),"  Scan at Zurich (J = 4)"))) +
-  theme_classic() + ylab("No. of SNPs") + xlab("") + scale_x_discrete(labels=c("Herbivore damage (Leaf holes)","Individual no. of external feeders","Individual no. of internal feeders","Total no. of insect species")) +
+  theme_classic() + ylab("No. of SNPs") + xlab("") + scale_x_discrete(labels=c("Herbivore damage (Leaf holes)","Individual no. of external chewers","Individual no. of other herbivores","Total no. of insect species")) +
   scale_fill_manual(values=c("red", "blue", "pink","skyblue"),name="Category",
                     breaks=c("beta2Pos_EHH", "beta2Pos_Beta", "beta2Neg_EHH", "beta2Neg_Beta"),
                     labels=c(expression(iHS:italic(beta)[2]>0), expression(BETA:italic(beta)[2]>0), expression(iHS:italic(beta)[2]<0), expression(BETA:italic(beta)[2]<0))) +
-  geom_text(data.frame(x=1,y=17,group=NA),mapping=aes(x=x,y=y),label="*",size=8) +
-  geom_text(data.frame(x=2,y=27,group=NA),mapping=aes(x=x,y=y),label="**",size=8) + 
-  geom_text(data.frame(x=4,y=10,group=NA),mapping=aes(x=x,y=y),label="*",size=8) + theme(legend.position=c(0.9,0.9))
+  geom_text(data.frame(x=1,y=17,group=NA),mapping=aes(x=x,y=y),label="*",size=6) +
+  geom_text(data.frame(x=2,y=25,group=NA),mapping=aes(x=x,y=y),label="**",size=6) + 
+  geom_text(data.frame(x=4,y=10,group=NA),mapping=aes(x=x,y=y),label="*",size=6) + theme(legend.position=c(0.9,0.9))
 
 
 which(repanel$pvalue[5:8]<0.001)
 
 h2 = ggplot(bar[17:32,],aes(y=value,x=trait,fill=group))+geom_bar(stat="identity", position="dodge") + labs(title=substitute(paste(bold("d"),"  Scan at Otsu (J = 4)"))) +
-  theme_classic() + ylab("No. of SNPs") + xlab("") + scale_x_discrete(labels=c("Herbivore damage (Leaf area loss)","Individual no. of external feeders","Individual no. of internal feeders","Total no. of insect species")) +
+  theme_classic() + ylab("No. of SNPs") + xlab("") + scale_x_discrete(labels=c("Herbivore damage (Leaf area loss)","Individual no. of external chewers","Individual no. of other herbivores","Total no. of insect species")) +
   scale_fill_manual(values=c("red", "blue", "pink","skyblue"),name="Category",
                     breaks=c("beta2Pos_EHH", "beta2Pos_Beta", "beta2Neg_EHH", "beta2Neg_Beta"),
                     labels=c(expression(iHS:italic(beta)[2]>0), expression(BETA:italic(beta)[2]>0), expression(iHS:italic(beta)[2]<0), expression(BETA:italic(beta)[2]<0))) +
-  geom_text(data.frame(x=1,y=27,group=NA),mapping=aes(x=x,y=y),label="***",size=8) + theme(legend.position="none")
+  geom_text(data.frame(x=1,y=25,group=NA),mapping=aes(x=x,y=y),label="***",size=6) + theme(legend.position="none")
 
 # for Figure S9c-d
 scan_bar1 = (h1 | h2)
@@ -195,24 +195,24 @@ bar$trait = factor(bar$trait,levels=repanel$trait)
 which(repanel$pvalue[1:4]<0.05)
 
 h1 = ggplot(bar[1:16,],aes(y=value,x=trait,fill=group))+geom_bar(stat="identity", position="dodge") + labs(title=substitute(paste(bold("e"),"  Scan at Zurich (J = 12)"))) +
-  theme_classic() + ylab("No. of SNPs") + xlab("") + scale_x_discrete(labels=c("Herbivore damage (Leaf holes)","Individual no. of external feeders","Individual no. of internal feeders","Total no. of insect species")) +
+  theme_classic() + ylab("No. of SNPs") + xlab("") + scale_x_discrete(labels=c("Herbivore damage (Leaf holes)","Individual no. of external chewers","Individual no. of other herbivores","Total no. of insect species")) +
   scale_fill_manual(values=c("red", "blue", "pink","skyblue"),name="Category",
                     breaks=c("beta2Pos_EHH", "beta2Pos_Beta", "beta2Neg_EHH", "beta2Neg_Beta"),
                     labels=c(expression(iHS:italic(beta)[2]>0), expression(BETA:italic(beta)[2]>0), expression(iHS:italic(beta)[2]<0), expression(BETA:italic(beta)[2]<0))) +
-  geom_text(data.frame(x=1,y=38,group=NA),mapping=aes(x=x,y=y),label="**",size=8) + theme(legend.position=c(0.9,0.9))
+  geom_text(data.frame(x=1,y=36,group=NA),mapping=aes(x=x,y=y),label="**",size=6) + theme(legend.position=c(0.9,0.9))
 
 which(repanel$pvalue[5:8]<0.001)
 
 h2 = ggplot(bar[17:32,],aes(y=value,x=trait,fill=group))+geom_bar(stat="identity", position="dodge") + labs(title=substitute(paste(bold("f"),"  Scan at Otsu (J = 12)"))) +
-  theme_classic() + ylab("No. of SNPs") + xlab("") + scale_x_discrete(labels=c("Herbivore damage (Leaf area loss)","Individual no. of external feeders","Individual no. of internal feeders","Total no. of insect species")) +
+  theme_classic() + ylab("No. of SNPs") + xlab("") + scale_x_discrete(labels=c("Herbivore damage (Leaf area loss)","Individual no. of external chewers","Individual no. of other herbivores","Total no. of insect species")) +
   scale_fill_manual(values=c("red", "blue", "pink","skyblue"),name="Category",
                     breaks=c("beta2Pos_EHH", "beta2Pos_Beta", "beta2Neg_EHH", "beta2Neg_Beta"),
                     labels=c(expression(iHS:italic(beta)[2]>0), expression(BETA:italic(beta)[2]>0), expression(iHS:italic(beta)[2]<0), expression(BETA:italic(beta)[2]<0))) +
-  geom_text(data.frame(x=4,y=35,group=NA),mapping=aes(x=x,y=y),label="***",size=8) + theme(legend.position="none")
+  geom_text(data.frame(x=4,y=30,group=NA),mapping=aes(x=x,y=y),label="***",size=6) + theme(legend.position="none")
 
 # for Figure S9e-f
 scan_bar2 = (h1 | h2)
 
 # Figure S9
 scan_p = (scan_hist / scan_bar1 / scan_bar2) + plot_layout(heights=c(1,1,1))
-ggsave(scan_p, filename="../figs/SelectionScan.pdf",width=18,height=9)
+ggsave(scan_p, filename="../figs/SelectionScan.pdf",width=18,height=10)

@@ -1,6 +1,6 @@
-#############################
-#permutation for subset data#
-#############################
+################################
+#analysis of permutation output#
+################################
 library(tidyverse)
 library(patchwork)
 source("coord.R")
@@ -37,7 +37,7 @@ for(i in 1:99) {
 }
 # saveRDS(perm_p,"./output/partCHZ_perm_p.rds")
 
-perm_th1 = quantile(-log10(perm_p),0.95)
+perm_th1p = quantile(-log10(perm_p),0.95)
 
 # output examples
 # > quantile(-log10(perm_p),0.95)
@@ -47,9 +47,32 @@ perm_th1 = quantile(-log10(perm_p),0.95)
 # 90% 
 # 6.574153 
 
+perm_p = c()
+for(i in 1:99) {
+  res = readRDS(paste0("../output/neiGWAS_rot/J4/partCHZ",i,".rds"))
+  perm_p = c(perm_p,min(res$P_nei))
+}
+# saveRDS(perm_p,"./output/partCHZ_rot_p.rds")
+
+perm_th1r = quantile(-log10(perm_p),0.95)
+
+# output examples
+# > quantile(-log10(perm_p),0.95)
+# 95% 
+# 6.802742 
+# > quantile(-log10(perm_p),0.90)
+# 90% 
+# 6.689917 
+
 # Figure S6b
-man1 = ggMan(f="./output/partCHZ_org.csv.gz")
-man1 = man1 + geom_hline(yintercept=perm_th1,lty=2,lwd=1.25,colour="grey") + labs(subtitle=substitute(paste(bold("c"),"  Subset data on herbivore damage (Leaf holes)")))
+man1a = ggMan(f="./output/partCHZ_org.csv.gz")
+man1a = man1a + geom_hline(yintercept=perm_th1p,lty=2,lwd=1.25,colour="blue") + 
+  labs(subtitle=substitute(paste(bold("c"),"  Subset data on herbivore damage (Leaf holes)")))
+
+man1b = ggMan(f="./output/partCHZ_org.csv.gz")
+man1b = man1b + geom_hline(yintercept=perm_th1r,lty=2,lwd=1.25,colour="red") +
+  labs(subtitle=substitute(paste(bold("f"),"  Subset data on herbivore damage (Leaf holes)")))
+
 
 ########################
 # 20-times permutation on the full data
@@ -60,31 +83,62 @@ for(i in 1:20) {
 }
 # saveRDS(perm_p,"./output/fullCHZ_perm_p.rds")
 
-perm_th2 = max(-log10(perm_p))
-perm_th2
+perm_th2p = max(-log10(perm_p))
+
+perm_p = c()
+for(i in 1:20) {
+  res = readRDS(paste0("../output/neiGWAS_rot/J4/fullCHZ",i,".rds"))
+  perm_p = c(perm_p,min(res$P_nei))
+}
+# saveRDS(perm_p,"./output/fullCHZ_rot_p.rds")
+
+perm_th2r = max(-log10(perm_p))
+
 
 # Figure S6a
-man2 = ggMan(f="./output/CHZneiGWAS_HolesS1.csv.gz")
-man2 = man2 + geom_hline(yintercept=perm_th2,lty=2,lwd=1.25,colour="grey") + labs(subtitle=substitute(paste(bold("b"),"  Full data on herbivore damage (Leaf holes)")))
+man2a = ggMan(f="./output/CHZneiGWAS_HolesS1.csv.gz")
+man2a = man2a + geom_hline(yintercept=perm_th2p,lty=2,lwd=1.25,colour="blue") + 
+  labs(subtitle=substitute(paste(bold("b"),"  Full data on herbivore damage (Leaf holes)")))
+
+man2b = ggMan(f="./output/CHZneiGWAS_HolesS1.csv.gz")
+man2b = man2b + geom_hline(yintercept=perm_th2r,lty=2,lwd=1.25,colour="red") +
+  labs(subtitle=substitute(paste(bold("e"),"  Full data on herbivore damage (Leaf holes)")))
+
 
 ###############
 # PVE permutations
-perm_pve = c()
+perm_pve1 = c()
 for(i in 1:99) {
   res = readRDS(paste0("../output/neiGWAS_perm/pve/fullCHZpve",i,".rds"))
   netPVE = (res$PVEself[2]+res$PVEnei[2]) - res$PVEself[1]
-  perm_pve = c(perm_pve,netPVE)
+  perm_pve1 = c(perm_pve1,netPVE)
 }
+# saveRDS(perm_pve1,"./output/fullCHZ_perm_pve.rds")
 
-# saveRDS(perm_pve,"./output/fullCHZ_perm_pve.rds")
+perm_pve2 = c()
+for(i in 1:99) {
+  res = readRDS(paste0("../output/neiGWAS_rot/pve/fullCHZpve",i,".rds"))
+  netPVE = (res$PVEself[2]+res$PVEnei[2]) - res$PVEself[1]
+  perm_pve2 = c(perm_pve2,netPVE)
+}
+# saveRDS(perm_pve2,"./output/fullCHZ_rot_pve.rds")
 
 # Figure S6c
-pve_hist = ggplot(NULL,aes(x=perm_pve)) + geom_histogram() + theme_classic() + 
-  geom_vline(xintercept=(0.51330843-0.452626269)) + # PVE for holes at J = 4
-  geom_vline(xintercept = quantile(perm_pve,0.95),lty=2,lwd=1.25,colour="grey") +
+pve_hist1 = ggplot(NULL,aes(x=perm_pve1)) + theme_classic() +
+  geom_histogram(fill=rgb(0,0,1,0.25)) +  
+  geom_vline(xintercept=(0.51330843-0.452626269),lwd=1.25,colour=grey(0,0.75)) + # PVE for holes at J = 4
+  geom_vline(xintercept = quantile(perm_pve1,0.95),lty=2,lwd=1.25,colour="blue") +
   xlab("PVE by neighbor genotype effects") + ylab("No. of iterations") +
   labs(subtitle=substitute(paste(bold("a"),"  Full data on herbivore damage (Leaf holes)")))
 
-man = pve_hist | man2 | man1
-ggsave(man,filename="../figs/permJ4.jpg",width=12,height=3,dpi=300)
+pve_hist2 = ggplot(NULL,aes(x=perm_pve2)) + theme_classic() +
+  geom_histogram(fill=rgb(1,0,0,0.25)) +  
+  geom_vline(xintercept=(0.51330843-0.452626269),lwd=1.25,colour=grey(0,0.75)) + # PVE for holes at J = 4
+  geom_vline(xintercept = quantile(perm_pve2,0.95),lty=2,lwd=1.25,colour="red") +
+  xlab("PVE by neighbor genotype effects") + ylab("No. of iterations") +
+  labs(subtitle=substitute(paste(bold("d"),"  Full data on herbivore damage (Leaf holes)")))
+
+
+man = (pve_hist1 | man2a | man1a) / (pve_hist2 | man2b | man1b)
+ggsave(man,filename="../figs/permJ4v2.jpg",width=12,height=6,dpi=300)
 

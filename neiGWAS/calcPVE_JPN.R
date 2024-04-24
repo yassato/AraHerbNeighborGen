@@ -33,7 +33,7 @@ smap = cbind(pheno_d$position_X,pheno_d$position_Y)
 # change spatial scale sqrt(2)+0.01; sqrt(8)+0.01; sqrt(18)+0.01 for s = 1 (J=4); s = 2 (J=12); or s = 3; respectively
 scale = sqrt(2)+0.01 
 
-g_nei = nei_coval(geno,smap=smap,scale=scale,grouping=pheno_d$Block,n_core=1L)
+g_nei = nei_coval(geno,smap=smap,scale=scale,grouping=pheno_d$Block,n_core=16L)
 
 q = ncol(geno)
 K_self = tcrossprod(geno)
@@ -44,6 +44,9 @@ K_nei = tcrossprod(g_nei)/(q-1)
 K_nei = as.matrix(Matrix::nearPD(K_nei,maxit=10^6)$mat)
 
 X = as.matrix(model.matrix(~factor(pheno_d$Block)+scale(pheno_d$InitLeafLen)+pheno_d$Bolting+pheno_d$edge))
+
+rm(geno); rm(g_nei)
+gc(); gc()
 
 resList = c()
 Y = scale(pheno_d$Score)
@@ -99,3 +102,4 @@ resList = rbind(resList,
 colnames(resList) = c("sigma_1","sigma_2","sigma_e","LL")
 
 write.csv(resList,"../output/JPNoutS1.csv",row.names=FALSE)
+

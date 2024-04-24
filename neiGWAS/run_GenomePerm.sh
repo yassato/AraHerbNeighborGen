@@ -2,6 +2,6 @@
 
 for i in {1..99}
 do
-Rscript ./neiGWAS/NeighborPerm_i.R $i
+Rscript ./neiGWAS/GenomePerm_i.R $i
 done
 

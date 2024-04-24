@@ -25,11 +25,11 @@ R script to depict Manhattan plots and other supplementary figures for the resul
 1. NeighborCHZ_wo_K2.R  
 R script to perform association mapping without $\mathbf{K}_2$.  
 
-1. NeighborPerm_i.R  
-R script to perform a single iteration of permutation tests.   
+1. Neighbor(Genome)Perm_i.R  
+R script to perform a single iteration of permutation tests based on the randomization of neighboring genotypes (Neighbor) or genome rotation (Genome).   
 
-1. run_NeighborPerm.sh  
-Shell script to control ```NeighborPerm_i.R```.
+1. run_Neighbor(Genome)Perm.sh  
+Shell script to control ```Neighbor(Genome)Perm_i.R```.
 
 1. NeighborPerm_out.R  
 R script to analyze outputs of permutation tests.
