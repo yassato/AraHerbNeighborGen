@@ -123,7 +123,7 @@ Please also make `../data/`, `../output/`, and `../figs/` above this working spa
 
 ## Working environment and software version
 
-### For association mapping, LASSO, and selction scan
+### For association mapping, LASSO, and selection scan
 
 Intel(R) Xeon(R) Gold 6126 CPU @ 2.60GHz $\times$ 24 cores  
 Memory 384 GB with CentOS7  
